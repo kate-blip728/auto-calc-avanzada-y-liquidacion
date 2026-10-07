@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -44,6 +44,11 @@ public partial class MainForm : Form {
         Controls.Add(calculatorTabs2824); page.Dispose();
         MenuStrip menu=new MenuStrip();
         menu.Items.Add("Inventario y nube",null,delegate { ShowLiquidacionMovil2940(); });
+        ToolStripMenuItem connections = new ToolStripMenuItem("Conexiones");
+        connections.DropDownItems.Add("Google Drive: conectar o importar de Navaja", null, delegate { ShowCloudConfiguration("Google Drive"); });
+        connections.DropDownItems.Add("Dropbox: conectar o importar de Navaja", null, delegate { ShowCloudConfiguration("Dropbox"); });
+        menu.Items.Add(connections);
+        menu.Items.Add("Buscar actualizaciones", null, delegate { CheckGitHubUpdate(); });
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
         sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
         Controls.Add(menu); MainMenuStrip=menu;

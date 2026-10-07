@@ -314,6 +314,10 @@ namespace TodoAMano
 
             TableLayoutPanel keypad = BuildCalculatorKeypad();
             AddFullRow(layout, keypad, false);
+            CheckBox showKeypad = new CheckBox { Text = "Mostrar teclado de números y signos", AutoSize = true, Checked = File.Exists(Path.Combine(dataDir, "mostrar_teclado.txt")) };
+            keypad.Visible = showKeypad.Checked;
+            showKeypad.CheckedChanged += delegate { keypad.Visible = showKeypad.Checked; string preference = Path.Combine(dataDir, "mostrar_teclado.txt"); if (showKeypad.Checked) File.WriteAllText(preference, "1"); else if (File.Exists(preference)) File.Delete(preference); };
+            AddFullRow(layout, showKeypad, false);
 
             FlowLayoutPanel buttons = ButtonRow();
             buttons.Controls.Add(NewButton("Calcular", delegate { RunCalculator1554(); }));

@@ -315,7 +315,7 @@ namespace TodoAMano { public partial class MainForm {
                 { "4", "5", "6", "Multiplicar" },
                 { "1", "2", "3", "Restar" },
                 { "0", "Coma decimal", "Porcentaje", "Sumar" },
-                { "Abrir paréntesis", "Cerrar paréntesis", "Borrar último", "Calcular" }
+                { "Abrir paréntesis", "Cerrar paréntesis", "Borrar último", "Igual" }
             };
             for (int r = 0; r < labels.GetLength(0); r++)
             {
@@ -340,7 +340,7 @@ namespace TodoAMano { public partial class MainForm {
         }
         private void HandleCalculatorButton(string label)
         {
-            if (label == "Calcular") { RunCalculator1554(); return; }
+            if (label == "Igual") { RunCalculator1554(); return; }
             if (label == "Borrar último")
             {
                 PlayCalculatorSound1554("calc_borrar");
