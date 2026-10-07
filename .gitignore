@@ -1,0 +1,9 @@
+test-data-*/
+Tests.exe
+__pycache__/
+*.pyc
+*_oauth.json
+datos/
+nvda_speech.json
+*.tmp
+*.bak
