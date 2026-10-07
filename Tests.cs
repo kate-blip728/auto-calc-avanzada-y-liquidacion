@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +8,15 @@ public partial class MainForm {
     private void Check(bool pass,string name){if(!pass)throw new Exception("FALLO: "+name);Console.WriteLine("OK: "+name);}
     public void RunTests(){
         soundsEnabled=false;mobileAutoSync2940=false;
+        foreach(Control control in Controls) Check(!(control is TextBox && control.AccessibleName == "Estado"), "sin cuadro de edición de estado");
+        ToolStripMenuItem help = null;
+        foreach(ToolStripItem entry in MainMenuStrip.Items) if(entry.Text == "Mostrar mensajes de ayuda") help = (ToolStripMenuItem)entry;
+        Check(help != null && helpControls.Count > 0, "opción de ayuda disponible");
+        help.Checked = false; Check(!helpEnabled && File.Exists(Path.Combine(dataDir, "ocultar_ayuda.txt")), "ocultar ayuda guarda preferencia");
+        using(var second = new MainForm(dataDir)) Check(!second.helpEnabled, "ayuda oculta al reabrir");
+        help.Checked = true; Check(helpEnabled && !File.Exists(Path.Combine(dataDir, "ocultar_ayuda.txt")), "reactivar ayuda");
+        AnnounceToScreenReader("Calculadora iniciada");
+        Check(File.ReadAllText(Path.Combine(dataDir, "nvda_speech.json")).Contains("Calculadora iniciada"), "inicio enviado al lector");
         Check(calculatorTabs2824.TabPages.Count==8,"ocho páginas originales");
         calcTemplate.SelectedIndex=0;calculadoraInput.Text="(25 * 79,90) / 100";Calculate();
         Check(calculadoraResultado.Text=="19,975","cálculo básico y coma decimal");

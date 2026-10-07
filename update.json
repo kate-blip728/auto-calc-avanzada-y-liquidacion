@@ -1,6 +1,6 @@
 {
-  "version": "0.1.2",
-  "file": "AutoCalc-0.1.2.nvda-addon",
-  "notes": "Actualizador de GitHub, teclado opcional que recuerda tu elección y menú Conexiones con importación de Navaja.",
-  "sha256": "90a2e3cbaa26266e40aa9d0466bf825a09b202cf31a73d463ce170627c7c3e00"
+  "version": "0.1.3",
+  "file": "AutoCalc-0.1.3.nvda-addon",
+  "notes": "Aviso de inicio solo por voz; opción para ocultar las ayudas y recordar la preferencia. Incluye actualizador de GitHub, teclado opcional y menú Conexiones.",
+  "sha256": "4b0f3a7abb37183c1038a6830efb854acc0d7a9435ee1d660b0268eaecb62daa"
 }

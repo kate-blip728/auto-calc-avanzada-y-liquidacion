@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 
 namespace TodoAMano { public partial class MainForm {
-    private const string AutoCalcVersion = "0.1.2";
+    private const string AutoCalcVersion = "0.1.3";
     private const string UpdateRoot = "https://raw.githubusercontent.com/kate-blip728/auto-calc-avanzada-y-liquidacion/main/";
     private bool updateBusy;
     private void CheckGitHubUpdate() {

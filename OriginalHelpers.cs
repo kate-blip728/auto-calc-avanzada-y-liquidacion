@@ -88,8 +88,8 @@ namespace TodoAMano { public partial class MainForm {
             layout.SetColumnSpan(label, 2);
 
             int resultRow = layout.RowCount++;
-            layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            box.Dock = DockStyle.Fill;
+            layout.RowStyles.Add(new RowStyle(IsHelpLabel1602(labelText, box) ? SizeType.AutoSize : SizeType.Percent, 100));
+            box.Dock = IsHelpLabel1602(labelText, box) ? DockStyle.Top : DockStyle.Fill;
             layout.Controls.Add(box, 0, resultRow);
             layout.SetColumnSpan(box, 2);
         }

@@ -25,7 +25,8 @@ public partial class MainForm : Form {
     private JavaScriptSerializer json = new JavaScriptSerializer();
     private System.Windows.Forms.Timer sellerDraftSaveTimer2930;
     private bool sellerDraftSavePending2930, sellerPerformanceInstalled2930;
-    private TextBox status;
+    private bool helpEnabled = true;
+    private readonly List<Control> helpControls = new List<Control>();
     private Label statusLabel;
     [DllImport("nvdaControllerClient64.dll", CharSet=CharSet.Unicode)]
     private static extern int nvdaController_speakText(string text);
@@ -39,8 +40,7 @@ public partial class MainForm : Form {
         MinimumSize=new Size(700,500); StartPosition=FormStartPosition.CenterScreen;
         ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         TabPage page=new TabPage(); page.Dock=DockStyle.Fill;
-        status=new TextBox { Dock=DockStyle.Bottom, ReadOnly=true, AccessibleName="Estado", Height=44, Multiline=true };
-        Controls.Add(status); BuildCalculatorSuite2824(page);
+        helpEnabled = !File.Exists(Path.Combine(dataDir, "ocultar_ayuda.txt")); BuildCalculatorSuite2824(page);
         Controls.Add(calculatorTabs2824); page.Dispose();
         MenuStrip menu=new MenuStrip();
         menu.Items.Add("Inventario y nube",null,delegate { ShowLiquidacionMovil2940(); });
@@ -48,6 +48,14 @@ public partial class MainForm : Form {
         connections.DropDownItems.Add("Google Drive: conectar o importar de Navaja", null, delegate { ShowCloudConfiguration("Google Drive"); });
         connections.DropDownItems.Add("Dropbox: conectar o importar de Navaja", null, delegate { ShowCloudConfiguration("Dropbox"); });
         menu.Items.Add(connections);
+        ToolStripMenuItem help = new ToolStripMenuItem("Mostrar mensajes de ayuda") { Checked = helpEnabled, CheckOnClick = true };
+        help.CheckedChanged += delegate {
+            helpEnabled = help.Checked;
+            foreach(Control control in helpControls) control.Visible = helpEnabled;
+            string preference = Path.Combine(dataDir, "ocultar_ayuda.txt");
+            if(helpEnabled) { if(File.Exists(preference))File.Delete(preference); } else File.WriteAllText(preference, "1");
+        };
+        menu.Items.Add(help);
         menu.Items.Add("Buscar actualizaciones", null, delegate { CheckGitHubUpdate(); });
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
         sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
@@ -55,17 +63,17 @@ public partial class MainForm : Form {
         Shown+=delegate { AnnounceToScreenReader("Auto Calc Avanzada y Liquidación. Lista."); };
         FormClosed+=delegate { if(mobileSyncPeriodicTimer2940!=null)mobileSyncPeriodicTimer2940.Dispose(); if(mobileSyncDebounceTimer2940!=null)mobileSyncDebounceTimer2940.Dispose(); };
     }
-    private void SetStatus(string text) { if(status!=null)status.Text=text; }
+    private void SetStatus(string text) { AnnounceToScreenReader(text); }
     private readonly object speechLock = new object();
     private void AnnounceToScreenReader(string text) {
         lock(speechLock) { try { string path=Path.Combine(dataDir,"nvda_speech.json");
             File.WriteAllText(path+".tmp",new JavaScriptSerializer().Serialize(new Dictionary<string,object>{{"id",Guid.NewGuid().ToString("N")},{"text",text}}),new UTF8Encoding(false));
             if(File.Exists(path))File.Replace(path+".tmp",path,null);else File.Move(path+".tmp",path);
-        }catch{} } SetStatus(text);
+        }catch{} }
     }
     private void AnnounceResults(Control control,string text) { AnnounceToScreenReader(text); }
-    private bool IsHelpLabel1602(string text,TextBoxBase box){return false;}
-    private void MarkHelpRow1602(Label label,TextBoxBase box){}
+    private bool IsHelpLabel1602(string text,TextBoxBase box){return text == "Ayuda:" || text == "Uso:" || text == "Uso rápido:" || text == "Información:";}
+    private void MarkHelpRow1602(Label label,TextBoxBase box){ helpControls.Add(label); helpControls.Add(box); label.Visible = helpEnabled; box.Visible = helpEnabled; }
     private void AppendBoundedPerformanceLine2917(string path,string line){File.AppendAllText(path,line+Environment.NewLine);}
     private void ExportSellerLiquidationStandalone2850(){
         using(SaveFileDialog f=new SaveFileDialog()){f.Filter="Calculadora independiente|*.zip";f.FileName="AutoCalc-independiente.zip";

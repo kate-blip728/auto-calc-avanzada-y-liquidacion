@@ -13,7 +13,7 @@ payload = base / 'addon/globalPlugins/autoCalc'
 payload.mkdir(parents=True, exist_ok=True)
 shutil.copyfile(base / 'AutoCalc.exe', payload / 'AutoCalc.exe')
 shutil.copytree(base / 'sounds', payload / 'sounds', dirs_exist_ok=True)
-target = base / 'downloads/AutoCalc-0.1.2.nvda-addon'
+target = base / 'downloads/AutoCalc-0.1.3.nvda-addon'
 target.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as archive:
     for path in sorted((base / 'addon').rglob('*')):
