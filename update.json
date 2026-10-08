@@ -1,6 +1,6 @@
 {
-  "version": "0.1.3",
-  "file": "AutoCalc-0.1.3.nvda-addon",
-  "notes": "Aviso de inicio solo por voz; opción para ocultar las ayudas y recordar la preferencia. Incluye actualizador de GitHub, teclado opcional y menú Conexiones.",
-  "sha256": "4b0f3a7abb37183c1038a6830efb854acc0d7a9435ee1d660b0268eaecb62daa"
+  "notes": "Aviso automático con sonido y resultado de operaciones ya realizadas. Opción para desactivarlo y corrección del historial para operaciones con el mismo resultado.",
+  "file": "AutoCalc-0.1.5.nvda-addon",
+  "sha256": "da9f8412aae9d229dc24645950029d80eed137890681cf70933fab51fab2b5a5",
+  "version": "0.1.5"
 }
