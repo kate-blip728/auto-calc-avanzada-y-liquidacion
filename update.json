@@ -1,6 +1,6 @@
 {
-  "notes": "Aviso automático con sonido y resultado de operaciones ya realizadas. Opción para desactivarlo y corrección del historial para operaciones con el mismo resultado.",
-  "file": "AutoCalc-0.1.5.nvda-addon",
-  "sha256": "da9f8412aae9d229dc24645950029d80eed137890681cf70933fab51fab2b5a5",
-  "version": "0.1.5"
+  "file": "AutoCalc-0.1.6.nvda-addon",
+  "version": "0.1.6",
+  "sha256": "31b2e95e817c64886632f4b7e46c1b9628ba31f84818f4c925a73b3b633ab55e",
+  "notes": "Elimina el anuncio duplicado Calculadora al cambiar de pestaña. Incluye cierre con Escape y reconocimiento de operaciones anteriores."
 }

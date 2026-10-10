@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -58,7 +58,7 @@ namespace TodoAMano { public partial class MainForm {
         using(response){status=(int)response.StatusCode;using(Stream stream=response.GetResponseStream())using(MemoryStream memory=new MemoryStream()){stream.CopyTo(memory);return memory.ToArray();}}
     }
     private void ShowCloudConfiguration(string provider){
-        using(Form f=new Form()){f.Text="Conectar "+provider;f.Width=650;f.Height=420;f.StartPosition=FormStartPosition.CenterParent;
+        using(Form f=new EscapeForm()){f.Text="Conectar "+provider;f.Width=650;f.Height=420;f.StartPosition=FormStartPosition.CenterParent;
             TableLayoutPanel layout=BaseLayout();
             TextBox info=ResultBox();info.Text="Usa la misma aplicación OAuth que Navaja para compartir su archivo de nube. Google Drive guarda estos datos en una carpeta privada por aplicación. Configura un cliente de escritorio en Google o una aplicación con PKCE en Dropbox. Las credenciales se guardan protegidas en este usuario de Windows.";info.Height=110;AddResultRow(layout,"Conexión:",info);
             var cfg=ReadCloudConfig(provider);
@@ -106,7 +106,7 @@ namespace TodoAMano { public partial class MainForm {
         if(provider=="Dropbox"){
             string url="https://www.dropbox.com/oauth2/authorize?response_type=code&token_access_type=offline&client_id="+Uri.EscapeDataString(cfg["client_id"])+"&code_challenge_method=S256&code_challenge="+challenge;
             Process.Start(new ProcessStartInfo(url){UseShellExecute=true});
-            using(Form f=new Form()){f.Text="Código de autorización de Dropbox";f.Width=550;f.Height=210;
+            using(Form f=new EscapeForm()){f.Text="Código de autorización de Dropbox";f.Width=550;f.Height=210;
                 TableLayoutPanel layout=BaseLayout();TextBox code=AddLabeledText(layout,"Pega el código mostrado por Dropbox:",false);
                 var buttons=ButtonRow();buttons.Controls.Add(NewButton("Conectar",delegate{string entered=code.Text.Trim();if(entered.Length==0)return;CompleteCloudAuthorization(provider,cfg,verifier,entered,null);f.Close();}));buttons.Controls.Add(NewButton("Cancelar",delegate{f.Close();}));AddFullRow(layout,buttons,false);f.Controls.Add(layout);f.ShowDialog(this);
             }return;

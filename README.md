@@ -1,10 +1,10 @@
 ﻿# Auto Calc Avanzada y Liquidación
 
-Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.3 de prueba**. No necesitas instalar ni abrir Navaja.
+Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.6 de prueba**. No necesitas instalar ni abrir Navaja.
 
 ## Instalar y abrir
 
-Descarga [AutoCalc-0.1.3.nvda-addon](AutoCalc-0.1.3.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
+Descarga [AutoCalc-0.1.6.nvda-addon](AutoCalc-0.1.6.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
 
 El complemento carga un pequeño lanzador y abre la calculadora sólo cuando la pides. La calculadora usa .NET Framework de Windows y sus controles estándar accesibles. No lleva las funciones de radio, correo, juegos en red ni otros módulos de Navaja.
 
@@ -46,7 +46,7 @@ Se ha compilado la calculadora y probado su construcción, cálculos básicos, c
 
 ## Código fuente
 
-El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.3.zip), extraerlo y compilarlo con los mismos scripts.
+El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.6.zip), extraerlo y compilarlo con los mismos scripts.
 
 ## Compilar
 
@@ -64,3 +64,11 @@ El teclado completo se muestra con la casilla **Mostrar teclado de números y si
 
 Para publicar una versión futura: cambia AutoCalcVersion en Updater.cs y version en manifest.ini, compila y empaqueta, sube el .nvda-addon a la raíz y actualiza update.json con version, file, sha256 y notes en el mismo commit. La descarga debe llamarse AutoCalc-VERSION.nvda-addon. SHA-256 comprueba integridad respecto al índice del mismo repositorio; no es una firma independiente. La comprobación es manual y no envía datos ni credenciales de liquidaciones.
 El aviso de inicio se envía al lector sin cuadro de edición. Desmarca **Mostrar mensajes de ayuda** en el menú para ocultar las ayudas; se recuerda al reabrir. Resultados y estados de sincronización conservan sus controles.
+## Cerrar con Escape
+Escape cierra la calculadora y la ventana de inventario y nube. En los formularios de conexión y autorización cancela sin pulsar Conectar ni confirmar los datos pendientes. Los resultados están dentro de la ventana principal. Los selectores de archivo y mensajes de Windows conservan sus teclas habituales. Al cerrar se conservan los guardados automáticos existentes; Escape no deshace una operación ya confirmada. La versión 0.1.6 está disponible en el índice de actualizaciones de GitHub.
+## Operaciones ya realizadas
+
+En Calcular, la opción Avisar automáticamente de operaciones ya realizadas está activada por defecto. Al escribir una operación guardada y dejar de teclear durante 0,9 segundos, suena el aviso de historial y NVDA anuncia el resultado sin pulsar Calcular. El resultado también queda disponible para copiar. Se reconoce la misma expresión y el mismo tipo de operación; los espacios alrededor de signos no importan. Usa las últimas 300 operaciones del historial local, también después de cerrar y abrir. Al desactivar la opción se guarda tu preferencia. El menú Sonidos permite silenciar el aviso.
+
+
+Al cambiar de pestaña se utiliza el anuncio nativo de NVDA; se elimina el aviso adicional que repetía Calculadora y el nombre de la pestaña.

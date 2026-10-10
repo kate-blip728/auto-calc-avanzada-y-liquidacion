@@ -277,11 +277,7 @@ namespace TodoAMano
             calculatorTabs2824.TabPages.Add(calculatorSellerPage2825);
             calculatorTabs2824.TabPages.Add(calculatorSellerHistoryPage2826);
             calculatorTabs2824.TabPages.Add(calculatorHistoryPage2824);
-            calculatorTabs2824.SelectedIndexChanged += delegate
-            {
-                if (calculatorTabs2824.SelectedTab != null)
-                    AnnounceToScreenReader("Calculadora. " + calculatorTabs2824.SelectedTab.Text + ".");
-            };
+            // NVDA announces the selected tab through the native accessibility event.
 
             page.Controls.Clear();
             page.Controls.Add(calculatorTabs2824);
@@ -331,6 +327,7 @@ namespace TodoAMano
             calculadoraResultado = AddLabeledText(layout, "Resultado:", false);
             calculadoraResultado.ReadOnly = true;
             calculadoraResultado.TextChanged += delegate { CaptureBasicHistory2824(); };
+            InstallRepeatedCalculation(layout);
 
             FlowLayoutPanel curiosityButtons = ButtonRow();
             curiosityButtons.Controls.Add(NewButton("Curiosidad del resultado", delegate { DescribeResultCuriosity2824(calculadoraResultado == null ? "" : calculadoraResultado.Text); }));
@@ -816,7 +813,7 @@ namespace TodoAMano
         private void ClearSellerLiquidation2825()
         {
             if (sellerLines2825.Count == 0) { PlayNamedSound("aviso"); AnnounceToScreenReader("La liquidación ya está vacía."); return; }
-            DialogResult answer = MessageBox.Show("¿Crear una liquidación nueva y borrar todas las filas actuales? Puedes guardarla antes como liquidación por fecha.", "Nueva liquidación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            DialogResult answer = MessageBox.Show("¿Crear una liquidación nueva y borrar todas las filas actuales? Puedes guardarla antes como liquidación por fecha.", "Nueva liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
             sellerLines2825.Clear();
             CancelSellerCorrection2827(false);
@@ -1328,7 +1325,7 @@ namespace TodoAMano
             if (item == null) { PlayNamedSound("aviso"); return; }
             if (sellerLines2825.Count > 0)
             {
-                DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por la liquidación guardada seleccionada. La liquidación histórica no se borrará. ¿Continuar?", "Cargar liquidación", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por la liquidación guardada seleccionada. La liquidación histórica no se borrará. ¿Continuar?", "Cargar liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
                 if (answer != DialogResult.Yes) return;
             }
             CancelSellerCorrection2827(false);
@@ -1376,7 +1373,7 @@ namespace TodoAMano
             if (item == null) { PlayNamedSound("aviso"); return; }
             if (sellerLines2825.Count > 0)
             {
-                DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por una copia de la liquidación seleccionada para corregirla. El registro histórico seguirá intacto hasta que pulses Guardar corrección. ¿Continuar?", "Corregir liquidación", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por una copia de la liquidación seleccionada para corregirla. El registro histórico seguirá intacto hasta que pulses Guardar corrección. ¿Continuar?", "Corregir liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
                 if (answer != DialogResult.Yes) return;
             }
             sellerLines2825.Clear();
@@ -1527,7 +1524,7 @@ namespace TodoAMano
             }
 
             string summary = BuildSellerCorrectionSummary2827(item, newWhen, newNote, sellerLines2825);
-            DialogResult answer = MessageBox.Show("Se guardará la corrección y se conservará una copia de los datos anteriores.\r\n\r\n" + summary + "\r\n\r\n¿Guardar corrección?", "Guardar corrección", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            DialogResult answer = MessageBox.Show("Se guardará la corrección y se conservará una copia de los datos anteriores.\r\n\r\n" + summary + "\r\n\r\n¿Guardar corrección?", "Guardar corrección", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
 
             SellerRevision2827 revision = new SellerRevision2827();
@@ -1589,7 +1586,7 @@ namespace TodoAMano
             SellerLiquidation2826 item = SelectedSellerSaved2826();
             if (item == null) { PlayNamedSound("aviso"); return; }
             string label = item.ToString();
-            DialogResult answer = MessageBox.Show("¿Eliminar esta liquidación guardada?\r\n\r\n" + label + "\r\n\r\nEl borrador actual no se modificará.", "Eliminar liquidación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            DialogResult answer = MessageBox.Show("¿Eliminar esta liquidación guardada?\r\n\r\n" + label + "\r\n\r\nEl borrador actual no se modificará.", "Eliminar liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
             RecordSellerLiquidationSyncTombstone2878(item);
             sellerSaved2826.Remove(item);
@@ -2638,10 +2635,10 @@ namespace TodoAMano
             if (calculatorHistoryLoading2824 || calculadoraResultado == null || calculadoraInput == null) return;
             string result = calculadoraResultado.Text.Trim();
             if (!IsHistoryResultValid2824(result)) return;
-            string key = calculadoraInput.Text + "\n" + result;
+            string kind = calcTemplate == null ? "Calculadora" : "Calculadora: " + calcTemplate.Text;
+            string key = kind + "\n" + calculadoraInput.Text + "\n" + result;
             if (key == lastBasicHistory2824) return;
             lastBasicHistory2824 = key;
-            string kind = calcTemplate == null ? "Calculadora" : "Calculadora: " + calcTemplate.Text;
             AddCalculatorHistory2824(kind, calculadoraInput.Text, result, "basic");
         }
 
@@ -2912,7 +2909,7 @@ namespace TodoAMano
         private void ClearHistory2824()
         {
             if (calculatorHistory2824.Count == 0) { PlayNamedSound("aviso"); AnnounceToScreenReader("El historial ya está vacío."); return; }
-            DialogResult answer = MessageBox.Show("¿Vaciar todo el historial de la calculadora? Esta acción no se puede deshacer.", "Vaciar historial", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+            DialogResult answer = MessageBox.Show("¿Vaciar todo el historial de la calculadora? Esta acción no se puede deshacer.", "Vaciar historial", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
             calculatorHistory2824.Clear();
             ScheduleCalculatorHistorySave285();

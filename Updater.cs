@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 
 namespace TodoAMano { public partial class MainForm {
-    private const string AutoCalcVersion = "0.1.3";
+    private const string AutoCalcVersion = "0.1.6";
     private const string UpdateRoot = "https://raw.githubusercontent.com/kate-blip728/auto-calc-avanzada-y-liquidacion/main/";
     private bool updateBusy;
     private void CheckGitHubUpdate() {
@@ -33,7 +33,7 @@ namespace TodoAMano { public partial class MainForm {
             if(e.Error!=null){AnnounceToScreenReader("No se pudo buscar la actualización. "+e.Error.Message);return;}
             var info=e.Result as Dictionary<string,string>;
             if(info==null){AnnounceToScreenReader("Auto Calc "+AutoCalcVersion+" está actualizado.");return;}
-            if(MessageBox.Show(this,"Hay una nueva versión: "+info["version"]+".\r\n\r\n"+info["notes"]+"\r\n\r\n¿Descargarla y abrir el instalador de NVDA?","Actualizar Auto Calc",MessageBoxButtons.YesNo,MessageBoxIcon.Information)!=DialogResult.Yes)return;
+            if(MessageBox.Show(this,"Hay una nueva versión: "+info["version"]+".\r\n\r\n"+info["notes"]+"\r\n\r\n¿Descargarla y abrir el instalador de NVDA?","Actualizar Auto Calc",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Information)!=DialogResult.Yes)return;
             DownloadGitHubUpdate(info);
         };
         worker.RunWorkerAsync();

@@ -18,10 +18,37 @@ public partial class MainForm {
         AnnounceToScreenReader("Calculadora iniciada");
         Check(File.ReadAllText(Path.Combine(dataDir, "nvda_speech.json")).Contains("Calculadora iniciada"), "inicio enviado al lector");
         Check(calculatorTabs2824.TabPages.Count==8,"ocho páginas originales");
+        AnnounceToScreenReader("aviso previo");
+        string speechBefore = File.ReadAllText(Path.Combine(dataDir, "nvda_speech.json"));
+        for(int tab=1; tab<calculatorTabs2824.TabPages.Count; tab++) calculatorTabs2824.SelectedIndex=tab;
+        calculatorTabs2824.SelectedIndex=0;
+        Check(File.ReadAllText(Path.Combine(dataDir, "nvda_speech.json")) == speechBefore, "cambiar pestañas no genera avisos de voz duplicados");
         calcTemplate.SelectedIndex=0;calculadoraInput.Text="(25 * 79,90) / 100";Calculate();
         Check(calculadoraResultado.Text=="19,975","cálculo básico y coma decimal");
         calcTemplate.SelectedIndex=1;calculadoraInput.Text="15;200";Calculate();
         Check(calculadoraResultado.Text=="30","porcentaje");
+        calcTemplate.SelectedIndex=0; calculadoraInput.Text="147 / 3"; Calculate();
+        Check(calculadoraResultado.Text=="49", "división de gemas");
+        int historyCount = calculatorHistory2824.Count;
+        calculadoraInput.Text="147/3";
+        Check(TryAnnounceRepeatedCalculation() && calculadoraResultado.Text=="49", "operación repetida sin calcular");
+        Check(File.ReadAllText(Path.Combine(dataDir,"nvda_speech.json")).Contains("Operación ya realizada. Resultado: 49."), "aviso enviado a NVDA");
+        Check(!TryAnnounceRepeatedCalculation() && calculatorHistory2824.Count==historyCount, "sin avisos ni entradas duplicadas");
+        calculadoraInput.Text="147/30"; Check(!TryAnnounceRepeatedCalculation(), "no confunde una cantidad más larga");
+        calculadoraInput.Text="1 47/3"; Check(!TryAnnounceRepeatedCalculation(), "no elimina espacios dentro de números");
+        calcTemplate.SelectedIndex=1; calculadoraInput.Text="147/3"; Check(!TryAnnounceRepeatedCalculation(), "operación rápida diferente no reutiliza división");
+        calcTemplate.SelectedIndex=0; calculadoraInput.Text="147/3";
+        repeatedCalculationEnabled.Checked=false; Check(!TryAnnounceRepeatedCalculation(), "aviso desactivable");
+        using(var second = new MainForm(dataDir)) Check(!second.repeatedCalculationEnabled.Checked, "preferencia de avisos persistente");
+        repeatedCalculationEnabled.Checked=true;
+        calculadoraInput.Text="98/2"; Calculate();
+        calculadoraInput.Text="98 / 2";
+        Check(TryAnnounceRepeatedCalculation(), "guarda operaciones distintas con el mismo resultado");
+        SaveCalculatorHistory2824();
+        using(var second = new MainForm(dataDir)) {
+            second.soundsEnabled=false; second.calcTemplate.SelectedIndex=0; second.calculadoraInput.Text="147 / 3";
+            Check(second.TryAnnounceRepeatedCalculation() && second.calculadoraResultado.Text=="49", "operación reconocida después de reabrir");
+        }
         Check(Math.Abs(ConvertTemperature1545(32,"Grados Fahrenheit","Grados Celsius"))<0.000001,"conversión temperatura");
         SellerLiquidation2826 item=new SellerLiquidation2826();item.Id="test-id";item.When="2026-10-07T09:00:00Z";item.UpdatedAt=item.When;item.DeviceId="test-device";
         item.Lines.Add(new SellerLine2825 { Type="Monedas", Denomination="1 €", Quantity=2, UnitValue=1, UnitsPerContainer=25 });sellerSaved2826.Add(item);
@@ -50,7 +77,32 @@ public partial class MainForm {
         SetLiquidacionMovilStatus2940("No se pudo sincronizar: sin conexión",false);LoadLiquidacionMovilSettings2940();Check(mobileLastResult2962.Contains("sin conexión"),"resultado conservado en ajustes");
     }
 }
+class EscapeTestForm : EscapeForm {
+    public bool EscapeForTest() { return ProcessDialogKey(Keys.Escape); }
+}
+static class EscapeTests {
+    public static void Run() {
+        bool accepted = false;
+        using(var modal = new EscapeTestForm()) {
+            var accept = new Button { DialogResult = DialogResult.OK };
+            accept.Click += delegate { accepted = true; };
+            modal.Controls.Add(accept); modal.AcceptButton = accept;
+            var timer = new System.Windows.Forms.Timer { Interval = 30 };
+            timer.Tick += delegate { timer.Stop(); modal.EscapeForTest(); };
+            modal.Shown += delegate { timer.Start(); };
+            var result = modal.ShowDialog();
+            timer.Dispose();
+            if(result != DialogResult.Cancel || accepted) throw new Exception("Escape confirmó el formulario");
+        }
+        using(var window = new EscapeTestForm()) {
+            bool closed = false; window.FormClosed += delegate { closed = true; };
+            window.Show(); window.EscapeForTest();
+            if(!closed) throw new Exception("Escape no cerró la ventana");
+        }
+        Console.WriteLine("OK: Escape cancela modal sin aceptar y cierra ventana independiente");
+    }
+}
 static class TestProgram {
-    [STAThread] static int Main(){try { using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
+    [STAThread] static int Main(){try { EscapeTests.Run(); using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
 }
 }

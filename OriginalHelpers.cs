@@ -121,6 +121,8 @@ namespace TodoAMano { public partial class MainForm {
         }
         private void Calculate()
         {
+            if (repeatedCalculationTimer != null) repeatedCalculationTimer.Stop();
+            lastRepeatedCalculation = "Calculadora: " + calcTemplate.Text + "\n" + RepeatedInputKey(calculadoraInput.Text);
             try
             {
                 string input = calculadoraInput.Text.Trim();
@@ -180,6 +182,7 @@ namespace TodoAMano { public partial class MainForm {
                     result = Convert.ToDouble(value, CultureInfo.InvariantCulture);
                 }
                 calculadoraResultado.Text = result.ToString("0.############", new CultureInfo("es-ES"));
+                CaptureBasicHistory2824();
                 ScheduleCalculatorSound1554("calc_resultado", 125);
                 SetStatus("Resultado listo.");
                 AnnounceToScreenReader("Resultado: " + calculadoraResultado.Text + ".");

@@ -44,7 +44,7 @@ namespace TodoAMano
                 return;
             }
 
-            mobileManager2940 = new Form();
+            mobileManager2940 = new EscapeForm();
             mobileManager2940.Text = "Inventario, rascas y sincronización móvil — Navaja Suiza";
             mobileManager2940.StartPosition = FormStartPosition.CenterParent;
             mobileManager2940.Width = 900;
@@ -311,7 +311,7 @@ namespace TodoAMano
         {
             Dictionary<string, object> item = SelectedMobile2940(mobileInventoryList2940);
             if (item == null) { PlayNamedSound("aviso"); return; }
-            if (MessageBox.Show("¿Eliminar el número " + MobileText2940(item, "numero") + "?", "Eliminar número", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
+            if (MessageBox.Show("¿Eliminar el número " + MobileText2940(item, "numero") + "?", "Eliminar número", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
             item["deleted_at"] = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
             StampMobileItem2940(item);
             SaveLiquidacionMovilData2940();
@@ -412,7 +412,7 @@ namespace TodoAMano
         {
             Dictionary<string, object> item = SelectedMobile2940(mobileScratchList2940);
             if (item == null) { PlayNamedSound("aviso"); return; }
-            if (MessageBox.Show("¿Eliminar el libro " + MobileText2940(item, "numero_libro") + "?", "Eliminar libro", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
+            if (MessageBox.Show("¿Eliminar el libro " + MobileText2940(item, "numero_libro") + "?", "Eliminar libro", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
             item["deleted_at"] = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
             StampMobileItem2940(item);
             SaveLiquidacionMovilData2940();

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 
 namespace TodoAMano {
-public partial class MainForm : Form {
+public partial class MainForm : EscapeForm {
     private string dataDir;
     private bool soundsEnabled = true;
     private TextBox calculadoraInput, calculadoraResultado, dadosInput, fechaInput;
