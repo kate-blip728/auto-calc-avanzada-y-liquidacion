@@ -1,6 +1,6 @@
 {
-  "file": "AutoCalc-0.1.6.nvda-addon",
-  "version": "0.1.6",
-  "sha256": "31b2e95e817c64886632f4b7e46c1b9628ba31f84818f4c925a73b3b633ab55e",
-  "notes": "Elimina el anuncio duplicado Calculadora al cambiar de pestaña. Incluye cierre con Escape y reconocimiento de operaciones anteriores."
+  "file": "AutoCalc-0.1.7.nvda-addon",
+  "version": "0.1.7",
+  "sha256": "04f3ac0685b21fc175924091947543708b12c483492404e1a6a403393978a319",
+  "notes": "Miniayuda de la operacion seleccionada, signos, orden de datos y ejemplos. Potencia: base;exponente, por ejemplo 2;8 da 256."
 }
