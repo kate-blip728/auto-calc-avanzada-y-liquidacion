@@ -1,10 +1,10 @@
 # Auto Calc Avanzada y Liquidación
 
-Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.8 de prueba**. No necesitas instalar ni abrir Navaja.
+Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.11 de prueba**. No necesitas instalar ni abrir Navaja.
 
 ## Instalar y abrir
 
-Descarga [AutoCalc-0.1.8.nvda-addon](AutoCalc-0.1.8.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
+Descarga [AutoCalc-0.1.11.nvda-addon](AutoCalc-0.1.11.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
 
 El complemento carga un pequeño lanzador y abre la calculadora sólo cuando la pides. La calculadora usa .NET Framework de Windows y sus controles estándar accesibles. No lleva las funciones de radio, correo, juegos en red ni otros módulos de Navaja.
 
@@ -46,7 +46,7 @@ Se ha compilado la calculadora y probado su construcción, cálculos básicos, c
 
 ## Código fuente
 
-El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.8.zip), extraerlo y compilarlo con los mismos scripts.
+El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.11.zip), extraerlo y compilarlo con los mismos scripts.
 
 ## Compilar
 
@@ -65,7 +65,7 @@ El teclado completo se muestra con la casilla **Mostrar teclado de números y si
 Para publicar una versión futura: cambia AutoCalcVersion en Updater.cs y version en manifest.ini, compila y empaqueta, sube el .nvda-addon a la raíz y actualiza update.json con version, file, sha256 y notes en el mismo commit. La descarga debe llamarse AutoCalc-VERSION.nvda-addon. SHA-256 comprueba integridad respecto al índice del mismo repositorio; no es una firma independiente. La comprobación es manual y no envía datos ni credenciales de liquidaciones.
 El aviso de inicio se envía al lector sin cuadro de edición. Desmarca **Mostrar mensajes de ayuda** en el menú para ocultar las ayudas; se recuerda al reabrir. Resultados y estados de sincronización conservan sus controles.
 ## Cerrar con Escape
-Escape cierra la calculadora y la ventana de inventario y nube. En los formularios de conexión y autorización cancela sin pulsar Conectar ni confirmar los datos pendientes. Los resultados están dentro de la ventana principal. Los selectores de archivo y mensajes de Windows conservan sus teclas habituales. Al cerrar se conservan los guardados automáticos existentes; Escape no deshace una operación ya confirmada. Esta versión se entrega localmente y todavía no está publicada en el índice de GitHub.
+Escape cierra la calculadora y la ventana de inventario y nube. En los formularios de conexión y autorización cancela sin pulsar Conectar ni confirmar los datos pendientes. Los resultados están dentro de la ventana principal. Los selectores de archivo y mensajes de Windows conservan sus teclas habituales. Al cerrar se conservan los guardados automáticos existentes; Escape no deshace una operación ya confirmada. Las versiones publicadas se ofrecen desde Buscar actualizaciones.
 ## Operaciones ya realizadas
 
 En Calcular, la opción Avisar automáticamente de operaciones ya realizadas está activada por defecto. Al escribir una operación guardada y dejar de teclear durante 0,9 segundos, suena el aviso de historial y NVDA anuncia el resultado sin pulsar Calcular. El resultado también queda disponible para copiar. Se reconoce la misma expresión y el mismo tipo de operación; los espacios alrededor de signos no importan. Usa las últimas 300 operaciones del historial local, también después de cerrar y abrir. Al desactivar la opción se guarda tu preferencia. El menú Sonidos permite silenciar el aviso.
@@ -81,3 +81,31 @@ Al elegir una operacion se muestra su miniayuda en un cuadro accesible y se anun
 ## Apertura más rápida en 0.1.8
 
 Se agrupa el cálculo de distribución de los controles al abrir la ventana. En una prueba local la mediana de construcción pasó de 1640 ms a 99 ms. No mide el reinicio completo de NVDA. Pruebas automatizadas superadas; pendiente de validación con NVDA real. [Detalles de la mejora](CAMBIOS-0.1.8.md).
+
+## Actualización con cierre automático en 0.1.9
+
+Tras descargar y verificar una actualización, la calculadora solicita su cierre normal, ejecuta los guardados y un auxiliar independiente espera a que el proceso termine antes de abrir el instalador de NVDA. Si tarda más de 60 segundos, no instala y guarda un diagnóstico junto al paquete. Si cancelas la instalación de NVDA, puedes volver a abrir la versión actual.
+
+Al pasar desde 0.1.8 u otra versión anterior a 0.1.9, cierra manualmente Auto Calc antes de aceptar la instalación y reiniciar NVDA. El cierre automático se aplica a las actualizaciones iniciadas desde 0.1.9; no modifica el actualizador que ya está ejecutándose en versiones anteriores.
+
+## Deshacer y copias de seguridad en 0.1.10
+
+La pestaña Liquidación vendedor tiene Deshacer cambio (Ctrl+Alt+Z) y Rehacer cambio (Ctrl+Alt+Y). Conserva hasta 50 cambios del borrador durante la sesión: añadir, editar, eliminar, modificar cantidades, crear una nueva liquidación y cargar otra como borrador o para corregir. Las fechas y notas del estado previo se recuperan junto con las filas. No deshace por separado cada letra escrita ni cada cambio de fecha. Al guardar o eliminar un registro histórico se vacían estas acciones; las correcciones guardadas mantienen sus revisiones originales.
+
+El menú Copias de seguridad permite crear, exportar y restaurar. Se hace una copia al abrir y cada 15 minutos si los datos han cambiado; las últimas 20 se conservan en la carpeta copias-seguridad de los datos de Auto Calc. La copia incluye borrador, fecha, nota, liquidaciones con revisiones e historial de cálculos. Excluye inventario, ajustes y conexiones. Los ZIP exportados a otra carpeta no se borran por rotación.
+
+Restaurar requiere confirmación y crea antes una copia del estado actual; rechaza archivos incompatibles antes de cambiar los datos. La restauración sustituye los datos locales y desactiva la sincronización automática. No modifica la nube ni recupera borrados ya sincronizados. Al volver a sincronizar, las reglas existentes de combinación de datos y eliminaciones siguen aplicándose. Revisa los registros antes de hacerlo.
+
+La fecha y la nota del borrador se conservan al cerrar normalmente. Deshacer y rehacer se reinician al cerrar. Se mantiene el cierre seguro para actualizar de 0.1.9.
+
+## Favoritos, memorias y operaciones en 0.1.11
+
+En el menú Favoritos y memorias puedes guardar el cálculo actual de Calcular o Práctica y científica. Guarda el modo, los datos y un nombre. Cargarlo no lo calcula automáticamente: revisa la entrada y pulsa Calcular. Se admiten 50 favoritos; los primeros nueve se abren con Ctrl+Mayúsculas+F1 a F9 mientras la aplicación está abierta. Gestionar favoritos permite renombrarlos y eliminarlos.
+
+Memorias con nombre permite guardar hasta 50 valores, con coma o punto decimal, recuperarlos en Expresión libre y eliminarlos. Inicialmente sugiere el resultado numérico básico actual, que puedes modificar. Guardar con un nombre ya existente pide confirmar su sustitución. Los nombres no distinguen mayúsculas. Se guardan entre sesiones en favoritos-memorias.json.
+
+En Expresión libre, Ans reutiliza el último resultado válido de Calcular durante esta sesión. Por ejemplo, calcula 2+3 y después Ans*4 para obtener 20. El botón Continuar cálculo (Ans) prepara el campo. Un error no borra el último resultado válido. También puedes escribir notación científica, por ejemplo 1e6. No se usan avisos del historial para expresiones con Ans porque su resultado depende del contexto.
+
+Las copias de seguridad nuevas incluyen favoritos y memorias. Restaurar una copia antigua que no los incluya conserva los actuales. Ans es temporal y se vacía al restaurar.
+
+Práctica y científica añade Quitar IVA del total (121;21), Qué porcentaje es una parte del total (30;200) y Precio por unidad (12;8) a Porcentajes y compras. Estadística añade Media ponderada (10;2;20;3). Cada operación explica el orden de entrada en su miniayuda. Se conserva el funcionamiento de las operaciones existentes.

@@ -188,13 +188,15 @@ namespace TodoAMano { public partial class MainForm {
                 }
                 else
                 {
-                    string expression = input.Replace(',', '.');
-                    if (!Regex.IsMatch(expression, @"^[0-9\s\.\+\-\*\/\(\)%]+$")) throw new Exception("La expresión contiene caracteres no permitidos.");
+                    string expression = ResolveAnswerToken(input).Replace(',', '.');
+                    if (!Regex.IsMatch(expression, @"^[0-9eE\s\.\+\-\*\/\(\)%]+$")) throw new Exception("La expresión contiene caracteres no permitidos.");
                     expression = Regex.Replace(expression, @"([0-9\.]+)%", "($1/100)");
                     System.Data.DataTable table = new System.Data.DataTable();
                     object value = table.Compute(expression, "");
                     result = Convert.ToDouble(value, CultureInfo.InvariantCulture);
                 }
+                result=FiniteResult(result);
+                lastAnswer=result;
                 calculadoraResultado.Text = result.ToString("0.############", new CultureInfo("es-ES"));
                 CaptureBasicHistory2824();
                 ScheduleCalculatorSound1554("calc_resultado", 125);
@@ -316,7 +318,7 @@ namespace TodoAMano { public partial class MainForm {
             for (int i = 0; i < parts.Length; i++)
             {
                 string number = parts[i].Trim().Replace(',', '.');
-                if (!double.TryParse(number, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out values[i]))
+                if (!double.TryParse(number, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out values[i]) || double.IsNaN(values[i]) || double.IsInfinity(values[i]))
                     throw new System.Exception("No se reconoce el número: " + parts[i].Trim());
             }
             return values;

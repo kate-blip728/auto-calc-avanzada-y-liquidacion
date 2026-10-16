@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 
 namespace TodoAMano { public partial class MainForm {
-    private const string AutoCalcVersion = "0.1.8";
+    private const string AutoCalcVersion = "0.1.11";
     private const string UpdateRoot = "https://raw.githubusercontent.com/kate-blip728/auto-calc-avanzada-y-liquidacion/main/";
     private bool updateBusy;
     private void CheckGitHubUpdate() {
@@ -57,8 +57,16 @@ namespace TodoAMano { public partial class MainForm {
             updateBusy=false;worker.Dispose();if(IsDisposed)return;
             if(e.Error!=null){AnnounceToScreenReader("No se pudo descargar la actualización. "+e.Error.Message);return;}
             string path=(string)e.Result;
-            AnnounceToScreenReader("Actualización descargada y verificada. Cierra la calculadora y acepta la instalación en NVDA. Después reinicia NVDA.");
-            try{Process.Start(new ProcessStartInfo(path){UseShellExecute=true});}catch(Exception ex){MessageBox.Show(this,"Abre este archivo con NVDA: "+path+"\r\n"+ex.Message,"Actualización descargada");}
+            AnnounceToScreenReader("Actualización verificada. La calculadora se cerrará y después se abrirá el instalador de NVDA.");
+            try {
+                using (Process current = Process.GetCurrentProcess())
+                using (Process helper = Process.Start(CreateUpdateInstallerStartInfo(path, current.Id, current.StartTime.ToUniversalTime().Ticks))) {
+                    if (helper == null) throw new Exception("No se pudo iniciar el instalador auxiliar.");
+                }
+                Close(); // Runs the normal FormClosing persistence handlers.
+            } catch(Exception ex) {
+                MessageBox.Show(this,"No se pudo preparar la instalación automática. Cierra Auto Calc antes de abrir este archivo con NVDA: "+path+"\r\n"+ex.Message,"Actualización descargada");
+            }
         };worker.RunWorkerAsync();
     }
     private static byte[] ReadUpdateUrl(string url,int maximum){

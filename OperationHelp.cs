@@ -13,7 +13,7 @@ namespace TodoAMano { public partial class MainForm {
         else if(mode.StartsWith("IVA")) help="Añade el IVA a una base. Escribe base;porcentaje. Ejemplo: 100;21 da 121.";
         else if(mode.StartsWith("Media")) help="Suma los números y divide entre cuántos hay. Sepáralos por punto y coma. Ejemplo: 10;20;30 da 20.";
         else if(mode.StartsWith("Regla")) help="Resuelve A es a B como C es a X: X es B por C dividido entre A. Escribe A;B;C. Ejemplo: 2;10;5 da 25. A no puede ser cero.";
-        else help="Escribe una expresión: + para sumar, - para restar, * asterisco para multiplicar y / barra para dividir. Usa paréntesis para agrupar. Ejemplo: (147 / 3) + 2 da 51. Para potencias elige el modo Potencia.";
+        else help="Escribe una expresión: + para sumar, - para restar, * asterisco para multiplicar y / barra para dividir. Usa paréntesis para agrupar. Ejemplo: (147 / 3) + 2 da 51. Para potencias elige el modo Potencia. Ans representa el último resultado válido de esta sesión; por ejemplo Ans*2.";
         return "Operación: "+mode+". "+help+" Puedes usar coma o punto decimal. Pulsa Calcular o Enter en el campo de datos.";
     }
     private void UpdateBasicOperationHelp() {
@@ -24,6 +24,8 @@ namespace TodoAMano { public partial class MainForm {
     private void UpdateAdvancedOperationHelp() {
         if(advancedOperationHelp==null || advancedOperation2824==null || advancedInput2824==null)return;
         advancedOperationHelp.Text="Operación: "+advancedOperation2824.Text+". Ejemplo de datos: "+advancedInput2824.Text+". Los valores se separan con punto y coma; para decimales usa coma o punto. Consulta la ayuda inferior para el orden de los datos. Pulsa Calcular para realizar esta operación.";
+        string extraHelp=ExtraOperationHelp(advancedOperation2824.Text);
+        if(extraHelp!=null)advancedOperationHelp.Text="Operación: "+advancedOperation2824.Text+". "+extraHelp;
         if(advancedOperation2824.Focused)AnnounceToScreenReader(advancedOperationHelp.Text);
     }
 }}

@@ -43,7 +43,7 @@ public partial class MainForm : EscapeForm {
         TabPage page=new TabPage(); page.Dock=DockStyle.Fill;
         helpEnabled = !File.Exists(Path.Combine(dataDir, "ocultar_ayuda.txt")); BuildCalculatorSuite2824(page);
         Controls.Add(calculatorTabs2824); page.Dispose();
-        MenuStrip menu=new MenuStrip();
+        MenuStrip menu=new MenuStrip(); menu.CanOverflow=true;
         menu.Items.Add("Inventario y nube",null,delegate { ShowLiquidacionMovil2940(); });
         ToolStripMenuItem connections = new ToolStripMenuItem("Conexiones");
         connections.DropDownItems.Add("Google Drive: conectar o importar de Navaja", null, delegate { ShowCloudConfiguration("Google Drive"); });
@@ -60,6 +60,9 @@ public partial class MainForm : EscapeForm {
         menu.Items.Add("Buscar actualizaciones", null, delegate { CheckGitHubUpdate(); });
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
         sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
+        InstallProductivityMenu(menu);
+        InstallBackupMenu(menu);
+        InstallDraftContext();
         Controls.Add(menu); MainMenuStrip=menu;
         CompleteStartupLayout();
         ResumeLayout(true);

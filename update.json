@@ -1,6 +1,6 @@
 {
-  "file": "AutoCalc-0.1.8.nvda-addon",
-  "version": "0.1.8",
-  "sha256": "778ae5cdc1cb3443f095544e34b71d2b54336090e7a1817b004d10baf0626216",
-  "notes": "Apertura más rápida: se agrupa la distribución de los controles al construir la ventana. Conserva datos y ajustes. Pruebas automatizadas superadas; pendiente de validar con NVDA real."
+  "version": "0.1.11",
+  "file": "AutoCalc-0.1.11.nvda-addon",
+  "sha256": "b800a5c817885635ec162cdce72299e98d9091b40d0599b6be31586017348b98",
+  "notes": "Favoritos con atajos, memorias con nombre, cálculos encadenados con Ans y cuatro operaciones nuevas. Incluye deshacer, copias y cierre previo al actualizar."
 }

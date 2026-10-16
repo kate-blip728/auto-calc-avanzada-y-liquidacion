@@ -268,6 +268,7 @@ namespace TodoAMano
         {
             if (InvokeRequired) { try { BeginInvoke((MethodInvoker)delegate { QueueLiquidacionMovilSync2940(announce); }); } catch { } return; }
             EnsureLiquidacionMovilData2940();
+            if (!announce && !mobileAutoSync2940) return;
             if (string.IsNullOrWhiteSpace(sellerSavedPath2826)) { sellerSavedPath2826 = System.IO.Path.Combine(dataDir, "calculadora_vendedor_liquidaciones.json"); LoadSellerLiquidations2826(); }
             if (mobileSyncBusy2940)
             {

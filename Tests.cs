@@ -109,7 +109,34 @@ static class EscapeTests {
         Console.WriteLine("OK: Escape cancela modal sin aceptar y cierra ventana independiente");
     }
 }
+static class UpdateHandoffTests {
+    public static void Run() {
+        string folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-update-"+Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(folder);
+        string release = Path.Combine(folder,"release.txt"), marker = Path.Combine(folder,"installed.txt");
+        string package = Path.Combine(folder,"update test's.cmd");
+        File.WriteAllText(package,"@echo installed>\""+marker+"\"\r\n");
+        string script = "$limit=[DateTime]::UtcNow.AddSeconds(25); while(-not [IO.File]::Exists('"+release.Replace("'","''")+"') -and [DateTime]::UtcNow -lt $limit){Start-Sleep -Milliseconds 100}";
+        var info = new System.Diagnostics.ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),"WindowsPowerShell","v1.0","powershell.exe"),"-NoProfile -NonInteractive -EncodedCommand "+Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(script))) { UseShellExecute=false, CreateNoWindow=true };
+        using(var parent=System.Diagnostics.Process.Start(info)) {
+            try {
+                using(var helper=System.Diagnostics.Process.Start(MainForm.CreateUpdateInstallerStartInfo(package,parent.Id,parent.StartTime.ToUniversalTime().Ticks))) {
+                    if(helper.WaitForExit(2500) || File.Exists(marker)) throw new Exception("El instalador se ejecutó antes de cerrar Auto Calc");
+                    File.WriteAllText(release,"close");
+                    if(!parent.WaitForExit(10000) || !helper.WaitForExit(10000) || helper.ExitCode!=0) throw new Exception("El auxiliar no completó la instalación");
+                    for(int i=0;i<50 && !File.Exists(marker);i++) System.Threading.Thread.Sleep(100);
+                    if(!File.Exists(marker)) throw new Exception("No se abrió el instalador tras cerrar Auto Calc");
+                }
+            } finally { File.WriteAllText(release,"close"); parent.WaitForExit(10000); }
+        }
+        using(var helper=System.Diagnostics.Process.Start(MainForm.CreateUpdateInstallerStartInfo(Path.Combine(folder,"missing.nvda-addon"),int.MaxValue,0))) {
+            if(!helper.WaitForExit(10000) || helper.ExitCode!=1) throw new Exception("No se detectó el fallo al abrir el instalador");
+            if(!File.Exists(Path.Combine(folder,"missing.nvda-addon.install-error.txt"))) throw new Exception("No se guardó el diagnóstico de instalación");
+        }
+        Console.WriteLine("OK: instalador espera al cierre, admite rutas con espacios y registra fallos");
+    }
+}
 static class TestProgram {
-    [STAThread] static int Main(){try { EscapeTests.Run(); using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
+    [STAThread] static int Main(){try { UpdateHandoffTests.Run(); EscapeTests.Run(); using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests(); using(var safety=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-safety-"+Guid.NewGuid().ToString("N")))) safety.RunSafetyFeatureTests(); using(var productivity=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-productivity-"+Guid.NewGuid().ToString("N")))) productivity.RunProductivityTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
 }
 }

@@ -324,6 +324,7 @@ namespace TodoAMano
             FlowLayoutPanel buttons = ButtonRow();
             buttons.Controls.Add(NewButton("Calcular", delegate { RunCalculator1554(); }));
             buttons.Controls.Add(NewButton("Copiar resultado", delegate { CopyBasicCalculatorResult2824(); }));
+            buttons.Controls.Add(NewButton("Continuar cálculo (Ans)", delegate { ContinueCalculation(); }));
             buttons.Controls.Add(NewButton("Usar resultado", delegate { UseBasicCalculatorResult2824(); }));
             buttons.Controls.Add(NewButton("Guardar en memoria", delegate { SaveCalculatorMemory2824(); }));
             buttons.Controls.Add(NewButton("Recuperar memoria", delegate { RecallCalculatorMemory2824(); }));
@@ -573,6 +574,7 @@ namespace TodoAMano
             AddFullRow(layout, sellerRows2825, true);
 
             FlowLayoutPanel rowButtons = ButtonRow();
+            AddDraftUndoButtons(rowButtons);
             rowButtons.Controls.Add(NewButton("+1", delegate { ChangeSelectedSellerQuantity2825(1); }));
             rowButtons.Controls.Add(NewButton("-1", delegate { ChangeSelectedSellerQuantity2825(-1); }));
             rowButtons.Controls.Add(NewButton("Eliminar fila", delegate { DeleteSelectedSellerLine2825(); }));
@@ -747,6 +749,7 @@ namespace TodoAMano
             line.Quantity = quantity;
             line.UnitValue = choice.Value;
             line.UnitsPerContainer = choice.UnitsPerContainer;
+            RememberDraftChange();
             sellerLines2825.Add(line);
             ScheduleSellerDraftSave2930();
             RefreshSellerRowAfterMutation2930(sellerLines2825.Count - 1, true);
@@ -778,6 +781,7 @@ namespace TodoAMano
             int quantity;
             if (!TryGetSellerQuantity2825(out quantity)) return;
             int index = sellerRows2825.SelectedIndex;
+            RememberDraftChange();
             SellerLine2825 line = sellerLines2825[index];
             line.Type = sellerType2825.Text;
             line.Denomination = choice.Label;
@@ -801,6 +805,8 @@ namespace TodoAMano
                 DeleteSelectedSellerLine2825();
                 return;
             }
+            if(next > 100000) { AnnounceToScreenReader("La cantidad máxima es 100000."); return; }
+            RememberDraftChange();
             line.Quantity = next;
             ScheduleSellerDraftSave2930();
             RefreshSellerRowAfterMutation2930(index, false);
@@ -812,6 +818,7 @@ namespace TodoAMano
         {
             if (sellerRows2825 == null || sellerRows2825.SelectedIndex < 0) { PlayNamedSound("aviso"); return; }
             int index = sellerRows2825.SelectedIndex;
+            RememberDraftChange();
             string deleted = sellerLines2825[index].ToString();
             sellerLines2825.RemoveAt(index);
             ScheduleSellerDraftSave2930();
@@ -826,6 +833,7 @@ namespace TodoAMano
             if (sellerLines2825.Count == 0) { PlayNamedSound("aviso"); AnnounceToScreenReader("La liquidación ya está vacía."); return; }
             DialogResult answer = MessageBox.Show("¿Crear una liquidación nueva y borrar todas las filas actuales? Puedes guardarla antes como liquidación por fecha.", "Nueva liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
+            RememberDraftChange();
             sellerLines2825.Clear();
             CancelSellerCorrection2827(false);
             ScheduleSellerDraftSave2930();
@@ -997,6 +1005,7 @@ namespace TodoAMano
 
         private void PrepareNewSellerLiquidationAfterSave2826()
         {
+            ClearDraftUndo();
             sellerLines2825.Clear();
             sellerCorrectionId2827 = "";
             UpdateSellerCorrectionStatus2827();
@@ -1339,6 +1348,7 @@ namespace TodoAMano
                 DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por la liquidación guardada seleccionada. La liquidación histórica no se borrará. ¿Continuar?", "Cargar liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
                 if (answer != DialogResult.Yes) return;
             }
+            RememberDraftChange();
             CancelSellerCorrection2827(false);
             sellerLines2825.Clear();
             foreach (SellerLine2825 line in item.Lines) sellerLines2825.Add(CloneSellerLine2826(line));
@@ -1387,6 +1397,7 @@ namespace TodoAMano
                 DialogResult answer = MessageBox.Show("Esto sustituirá el borrador actual por una copia de la liquidación seleccionada para corregirla. El registro histórico seguirá intacto hasta que pulses Guardar corrección. ¿Continuar?", "Corregir liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
                 if (answer != DialogResult.Yes) return;
             }
+            RememberDraftChange();
             sellerLines2825.Clear();
             foreach (SellerLine2825 line in item.Lines) sellerLines2825.Add(CloneSellerLine2826(line));
             ScheduleSellerDraftSave2930();
@@ -1407,6 +1418,7 @@ namespace TodoAMano
                 if (announce) { PlayNamedSound("aviso"); AnnounceToScreenReader("No hay ninguna corrección activa."); }
                 return;
             }
+            if(announce) RememberDraftChange();
             sellerCorrectionId2827 = "";
             UpdateSellerCorrectionStatus2827();
             if (announce)
@@ -1544,6 +1556,7 @@ namespace TodoAMano
             revision.PreviousNote = item.Note;
             revision.ChangeSummary = summary;
             foreach (SellerLine2825 line in item.Lines) revision.PreviousLines.Add(CloneSellerLine2826(line));
+            ClearDraftUndo();
             item.Revisions.Add(revision);
 
             item.When = newWhen.ToString("o", CultureInfo.InvariantCulture);
@@ -1599,6 +1612,7 @@ namespace TodoAMano
             string label = item.ToString();
             DialogResult answer = MessageBox.Show("¿Eliminar esta liquidación guardada?\r\n\r\n" + label + "\r\n\r\nEl borrador actual no se modificará.", "Eliminar liquidación", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (answer != DialogResult.Yes) return;
+            ClearDraftUndo();
             RecordSellerLiquidationSyncTombstone2878(item);
             sellerSaved2826.Remove(item);
             if (string.Equals(sellerCorrectionId2827, item.Id, StringComparison.OrdinalIgnoreCase)) CancelSellerCorrection2827(false);
@@ -1860,9 +1874,9 @@ namespace TodoAMano
             string category = advancedCategory2824.Text;
             string[] operations;
             if (category == "Porcentajes y compras")
-                operations = new string[] { "Cambio porcentual", "Margen sobre precio de venta", "Descuento encadenado", "Cambio a devolver", "Propina y reparto" };
+                operations = new string[] { "Cambio porcentual", "Margen sobre precio de venta", "Descuento encadenado", "Cambio a devolver", "Propina y reparto", "Quitar IVA del total", "Qué porcentaje es una parte del total", "Precio por unidad" };
             else if (category == "Estadística")
-                operations = new string[] { "Suma", "Media", "Mediana", "Mínimo", "Máximo", "Rango", "Desviación estándar poblacional" };
+                operations = new string[] { "Suma", "Media", "Mediana", "Mínimo", "Máximo", "Rango", "Desviación estándar poblacional", "Media ponderada" };
             else if (category == "Científica")
                 operations = new string[] { "Raíz cúbica", "Logaritmo decimal", "Logaritmo natural", "Seno en grados", "Coseno en grados", "Tangente en grados", "Factorial", "Combinaciones n sobre r", "Permutaciones de n tomando r" };
             else if (category == "Finanzas")
@@ -1880,6 +1894,8 @@ namespace TodoAMano
         {
             if (advancedOperation2824 == null || advancedInput2824 == null) return;
             string op = advancedOperation2824.Text;
+            string extraExample=ExtraOperationExample(op);
+            if(extraExample!=null) { advancedInput2824.Text=extraExample; return; }
             if (op == "Cambio porcentual") advancedInput2824.Text = "100;125";
             else if (op == "Margen sobre precio de venta") advancedInput2824.Text = "60;100";
             else if (op == "Descuento encadenado") advancedInput2824.Text = "100;20;10";
@@ -1927,6 +1943,8 @@ namespace TodoAMano
 
         private string CalculateAdvancedText2824(string op, string input)
         {
+            string extraResult=CalculateExtraOperation(op,input);
+            if(extraResult!=null)return extraResult;
             CultureInfo es = SellerCulture2825;
             double[] values;
             if (op == "Cambio porcentual")

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -48,6 +48,7 @@ public partial class MainForm {
 
     private bool TryAnnounceRepeatedCalculation() {
         if (!repeatedCalculationEnabled.Checked || calculatorHistoryLoading2824) return false;
+        if(HasAnswerToken(calculadoraInput.Text)) return false; // Ans changes after every calculation.
         string input = RepeatedInputKey(calculadoraInput.Text);
         string kind = "Calculadora: " + calcTemplate.Text;
         string key = kind + "\n" + input;
@@ -60,6 +61,8 @@ public partial class MainForm {
             calculatorHistoryLoading2824 = true;
             try { calculadoraResultado.Text = item.Result; }
             finally { calculatorHistoryLoading2824 = false; }
+            double numeric;
+            if(double.TryParse(item.Result.Replace(',','.'), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out numeric) && !double.IsNaN(numeric) && !double.IsInfinity(numeric)) lastAnswer=numeric;
             PlayCalculatorSound1554("calc_historial");
             AnnounceToScreenReader("Operación ya realizada. Resultado: " + item.Result + ".");
             return true;
