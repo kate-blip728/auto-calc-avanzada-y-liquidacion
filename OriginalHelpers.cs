@@ -11,9 +11,22 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Drawing;
 namespace TodoAMano { public partial class MainForm {
+        // Batch initial layout; later dialogs continue to lay out normally.
+        private List<Control> startupLayouts = new List<Control>();
+        private void BatchStartupLayout(Control control) {
+            if (startupLayouts == null) return;
+            control.SuspendLayout();
+            startupLayouts.Add(control);
+        }
+        private void CompleteStartupLayout() {
+            for (int i = startupLayouts.Count - 1; i >= 0; i--)
+                startupLayouts[i].ResumeLayout(true);
+            startupLayouts = null;
+        }
         private TableLayoutPanel BaseLayout()
         {
             TableLayoutPanel layout = new TableLayoutPanel();
+            BatchStartupLayout(layout);
             layout.Dock = DockStyle.Fill;
             layout.Padding = new Padding(12);
             layout.ColumnCount = 2;
@@ -96,6 +109,7 @@ namespace TodoAMano { public partial class MainForm {
         private FlowLayoutPanel ButtonRow()
         {
             FlowLayoutPanel panel = new FlowLayoutPanel();
+            BatchStartupLayout(panel);
             panel.AutoSize = true;
             panel.WrapContents = true;
             return panel;

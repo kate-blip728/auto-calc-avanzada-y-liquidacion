@@ -1,10 +1,10 @@
 # Auto Calc Avanzada y Liquidación
 
-Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.7 de prueba**. No necesitas instalar ni abrir Navaja.
+Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.8 de prueba**. No necesitas instalar ni abrir Navaja.
 
 ## Instalar y abrir
 
-Descarga [AutoCalc-0.1.7.nvda-addon](AutoCalc-0.1.7.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
+Descarga [AutoCalc-0.1.8.nvda-addon](AutoCalc-0.1.8.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
 
 El complemento carga un pequeño lanzador y abre la calculadora sólo cuando la pides. La calculadora usa .NET Framework de Windows y sus controles estándar accesibles. No lleva las funciones de radio, correo, juegos en red ni otros módulos de Navaja.
 
@@ -46,7 +46,7 @@ Se ha compilado la calculadora y probado su construcción, cálculos básicos, c
 
 ## Código fuente
 
-El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.7.zip), extraerlo y compilarlo con los mismos scripts.
+El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.8.zip), extraerlo y compilarlo con los mismos scripts.
 
 ## Compilar
 
@@ -77,3 +77,7 @@ Al cambiar de pestaña se utiliza el anuncio nativo de NVDA; se elimina el aviso
 ## Miniayuda de operaciones en 0.1.7
 
 Al elegir una operacion se muestra su miniayuda en un cuadro accesible y se anuncia al lector. Explica los signos y el orden de los datos. Potencia: base;exponente; por ejemplo 2;8 da 256. Las operaciones avanzadas muestran su nombre y un ejemplo.
+
+## Apertura más rápida en 0.1.8
+
+Se agrupa el cálculo de distribución de los controles al abrir la ventana. En una prueba local la mediana de construcción pasó de 1640 ms a 99 ms. No mide el reinicio completo de NVDA. Pruebas automatizadas superadas; pendiente de validación con NVDA real. [Detalles de la mejora](CAMBIOS-0.1.8.md).

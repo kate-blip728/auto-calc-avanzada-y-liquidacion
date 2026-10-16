@@ -36,6 +36,7 @@ public partial class MainForm : EscapeForm {
     public MainForm(string directory) {
         dataDir = directory ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoCalcAvanzadaLiquidacion");
         Directory.CreateDirectory(dataDir);
+        SuspendLayout();
         Text = "Auto Calc Avanzada y Liquidación"; Width=960; Height=780;
         MinimumSize=new Size(700,500); StartPosition=FormStartPosition.CenterScreen;
         ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
@@ -60,6 +61,8 @@ public partial class MainForm : EscapeForm {
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
         sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
         Controls.Add(menu); MainMenuStrip=menu;
+        CompleteStartupLayout();
+        ResumeLayout(true);
         Shown+=delegate { AnnounceToScreenReader("Auto Calc Avanzada y Liquidación. Lista."); };
         FormClosed+=delegate { if(mobileSyncPeriodicTimer2940!=null)mobileSyncPeriodicTimer2940.Dispose(); if(mobileSyncDebounceTimer2940!=null)mobileSyncDebounceTimer2940.Dispose(); };
     }

@@ -8,6 +8,13 @@ public partial class MainForm {
     private void Check(bool pass,string name){if(!pass)throw new Exception("FALLO: "+name);Console.WriteLine("OK: "+name);}
     public void RunTests(){
         soundsEnabled=false;mobileAutoSync2940=false;
+        calcTemplate.SelectedIndex=8;
+        Check(basicOperationHelp.Text.Contains("base;exponente") && basicOperationHelp.Text.Contains("2;8"),"miniayuda de potencia explica signos y ejemplo");
+        calculadoraInput.Text="2;8";Calculate();
+        Check(calculadoraResultado.Text=="256","ejemplo de potencia correcto");
+        calcTemplate.SelectedIndex=7;
+        Check(basicOperationHelp.Text.Contains("no negativo"),"miniayuda cambia al seleccionar raiz");
+        calcTemplate.SelectedIndex=0;
         foreach(Control control in Controls) Check(!(control is TextBox && control.AccessibleName == "Estado"), "sin cuadro de edición de estado");
         ToolStripMenuItem help = null;
         foreach(ToolStripItem entry in MainMenuStrip.Items) if(entry.Text == "Mostrar mensajes de ayuda") help = (ToolStripMenuItem)entry;

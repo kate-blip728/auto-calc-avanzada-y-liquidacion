@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using System.Web.Script.Serialization;
 
 namespace TodoAMano { public partial class MainForm {
-    private const string AutoCalcVersion = "0.1.6";
+    private const string AutoCalcVersion = "0.1.8";
     private const string UpdateRoot = "https://raw.githubusercontent.com/kate-blip728/auto-calc-avanzada-y-liquidacion/main/";
     private bool updateBusy;
     private void CheckGitHubUpdate() {

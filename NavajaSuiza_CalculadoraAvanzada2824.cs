@@ -301,11 +301,17 @@ namespace TodoAMano
             calcTemplate.SelectedIndexChanged += delegate
             {
                 ApplyCalculatorTemplate();
+                UpdateBasicOperationHelp();
                 if (calcTemplate.Focused) PlayCalculatorSound1554("calc_operacion");
             };
 
             calculadoraInput = AddLabeledText(layout, "Cálculo o datos:", false);
             calculadoraInput.Text = "(25 * 79,90) / 100";
+            basicOperationHelp = ResultBox();
+            basicOperationHelp.AccessibleName = "Miniayuda de la operación seleccionada";
+            basicOperationHelp.Height = 85;
+            AddResultRow(layout, "Miniayuda:", basicOperationHelp);
+            UpdateBasicOperationHelp();
             AttachCalculatorTextBox1554(calculadoraInput, delegate { RunCalculator1554(); });
 
             TableLayoutPanel keypad = BuildCalculatorKeypad();
@@ -349,12 +355,17 @@ namespace TodoAMano
             });
             advancedCategory2824.SelectedIndexChanged += delegate { RefreshAdvancedOperations2824(); };
             advancedOperation2824 = AddLabeledCombo(layout, "Operación:", new string[0]);
-            advancedOperation2824.SelectedIndexChanged += delegate { ApplyAdvancedExample2824(); };
+            advancedOperation2824.SelectedIndexChanged += delegate { ApplyAdvancedExample2824(); UpdateAdvancedOperationHelp(); };
             RefreshAdvancedOperations2824();
 
             advancedInput2824 = AddLabeledText(layout, "Valores:", false);
             AttachCalculatorTextBox1554(advancedInput2824, delegate { CalculateAdvanced2824(); });
             ApplyAdvancedExample2824();
+            advancedOperationHelp = ResultBox();
+            advancedOperationHelp.AccessibleName = "Miniayuda de la operación avanzada seleccionada";
+            advancedOperationHelp.Height = 75;
+            AddResultRow(layout, "Miniayuda:", advancedOperationHelp);
+            UpdateAdvancedOperationHelp();
 
             FlowLayoutPanel buttons = ButtonRow();
             buttons.Controls.Add(NewButton("Calcular", delegate { CalculateAdvanced2824(); }));

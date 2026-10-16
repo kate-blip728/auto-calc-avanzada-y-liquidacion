@@ -1,6 +1,6 @@
 {
-  "file": "AutoCalc-0.1.7.nvda-addon",
-  "version": "0.1.7",
-  "sha256": "04f3ac0685b21fc175924091947543708b12c483492404e1a6a403393978a319",
-  "notes": "Miniayuda de la operacion seleccionada, signos, orden de datos y ejemplos. Potencia: base;exponente, por ejemplo 2;8 da 256."
+  "file": "AutoCalc-0.1.8.nvda-addon",
+  "version": "0.1.8",
+  "sha256": "778ae5cdc1cb3443f095544e34b71d2b54336090e7a1817b004d10baf0626216",
+  "notes": "Apertura más rápida: se agrupa la distribución de los controles al construir la ventana. Conserva datos y ajustes. Pruebas automatizadas superadas; pendiente de validar con NVDA real."
 }
