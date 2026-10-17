@@ -1,6 +1,6 @@
 {
-  "version": "0.1.11",
-  "file": "AutoCalc-0.1.11.nvda-addon",
-  "sha256": "b800a5c817885635ec162cdce72299e98d9091b40d0599b6be31586017348b98",
-  "notes": "Favoritos con atajos, memorias con nombre, cálculos encadenados con Ans y cuatro operaciones nuevas. Incluye deshacer, copias y cierre previo al actualizar."
+  "file": "AutoCalc-0.1.12.nvda-addon",
+  "version": "0.1.12",
+  "sha256": "2c9ac4f01e7b3dc7cfe1f1fd3a2f8ccef5e0529bb9b57ebe2b6dc692eaaa6ced",
+  "notes": "Tres packs de sonidos: Clásico, Curioso y Teléfono. Marcación por dígito, selección persistente y muestra desde el menú Pack de sonidos."
 }

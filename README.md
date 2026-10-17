@@ -1,10 +1,10 @@
-# Auto Calc Avanzada y Liquidación
+﻿# Auto Calc Avanzada y Liquidación
 
-Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.11 de prueba**. No necesitas instalar ni abrir Navaja.
+Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.12 de prueba**. No necesitas instalar ni abrir Navaja.
 
 ## Instalar y abrir
 
-Descarga [AutoCalc-0.1.11.nvda-addon](AutoCalc-0.1.11.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
+Descarga [AutoCalc-0.1.12.nvda-addon](AutoCalc-0.1.12.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
 
 El complemento carga un pequeño lanzador y abre la calculadora sólo cuando la pides. La calculadora usa .NET Framework de Windows y sus controles estándar accesibles. No lleva las funciones de radio, correo, juegos en red ni otros módulos de Navaja.
 
@@ -46,7 +46,7 @@ Se ha compilado la calculadora y probado su construcción, cálculos básicos, c
 
 ## Código fuente
 
-El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.11.zip), extraerlo y compilarlo con los mismos scripts.
+El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.12.zip), extraerlo y compilarlo con los mismos scripts.
 
 ## Compilar
 
@@ -65,7 +65,7 @@ El teclado completo se muestra con la casilla **Mostrar teclado de números y si
 Para publicar una versión futura: cambia AutoCalcVersion en Updater.cs y version en manifest.ini, compila y empaqueta, sube el .nvda-addon a la raíz y actualiza update.json con version, file, sha256 y notes en el mismo commit. La descarga debe llamarse AutoCalc-VERSION.nvda-addon. SHA-256 comprueba integridad respecto al índice del mismo repositorio; no es una firma independiente. La comprobación es manual y no envía datos ni credenciales de liquidaciones.
 El aviso de inicio se envía al lector sin cuadro de edición. Desmarca **Mostrar mensajes de ayuda** en el menú para ocultar las ayudas; se recuerda al reabrir. Resultados y estados de sincronización conservan sus controles.
 ## Cerrar con Escape
-Escape cierra la calculadora y la ventana de inventario y nube. En los formularios de conexión y autorización cancela sin pulsar Conectar ni confirmar los datos pendientes. Los resultados están dentro de la ventana principal. Los selectores de archivo y mensajes de Windows conservan sus teclas habituales. Al cerrar se conservan los guardados automáticos existentes; Escape no deshace una operación ya confirmada. Las versiones publicadas se ofrecen desde Buscar actualizaciones.
+Escape cierra la calculadora y la ventana de inventario y nube. En los formularios de conexión y autorización cancela sin pulsar Conectar ni confirmar los datos pendientes. Los resultados están dentro de la ventana principal. Los selectores de archivo y mensajes de Windows conservan sus teclas habituales. Al cerrar se conservan los guardados automáticos existentes; Escape no deshace una operación ya confirmada. Esta versión se entrega localmente y todavía no está publicada en el índice de GitHub.
 ## Operaciones ya realizadas
 
 En Calcular, la opción Avisar automáticamente de operaciones ya realizadas está activada por defecto. Al escribir una operación guardada y dejar de teclear durante 0,9 segundos, suena el aviso de historial y NVDA anuncia el resultado sin pulsar Calcular. El resultado también queda disponible para copiar. Se reconoce la misma expresión y el mismo tipo de operación; los espacios alrededor de signos no importan. Usa las últimas 300 operaciones del historial local, también después de cerrar y abrir. Al desactivar la opción se guarda tu preferencia. El menú Sonidos permite silenciar el aviso.
@@ -98,7 +98,7 @@ Restaurar requiere confirmación y crea antes una copia del estado actual; recha
 
 La fecha y la nota del borrador se conservan al cerrar normalmente. Deshacer y rehacer se reinician al cerrar. Se mantiene el cierre seguro para actualizar de 0.1.9.
 
-## Favoritos, memorias y operaciones en 0.1.11
+## Favoritos, memorias y operaciones en 0.1.12
 
 En el menú Favoritos y memorias puedes guardar el cálculo actual de Calcular o Práctica y científica. Guarda el modo, los datos y un nombre. Cargarlo no lo calcula automáticamente: revisa la entrada y pulsa Calcular. Se admiten 50 favoritos; los primeros nueve se abren con Ctrl+Mayúsculas+F1 a F9 mientras la aplicación está abierta. Gestionar favoritos permite renombrarlos y eliminarlos.
 
@@ -109,3 +109,9 @@ En Expresión libre, Ans reutiliza el último resultado válido de Calcular dura
 Las copias de seguridad nuevas incluyen favoritos y memorias. Restaurar una copia antigua que no los incluya conserva los actuales. Ans es temporal y se vacía al restaurar.
 
 Práctica y científica añade Quitar IVA del total (121;21), Qué porcentaje es una parte del total (30;200) y Precio por unidad (12;8) a Porcentajes y compras. Estadística añade Media ponderada (10;2;20;3). Cada operación explica el orden de entrada en su miniayuda. Se conserva el funcionamiento de las operaciones existentes.
+
+## Pack Curioso
+En Pack de sonidos, elige Curioso: burbujas y arcade. Incluye 15 efectos originales. La elección se conserva y puedes volver a Clásico.
+
+## Sonidos 0.1.12
+Pack de sonidos: Clásico, Curioso (burbujas y arcade) y Teléfono (marcación por cada dígito, línea, llamada y ocupado). La selección se conserva al reabrir. Los sonidos se desactivan desde Sonidos.

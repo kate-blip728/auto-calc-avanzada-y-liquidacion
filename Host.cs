@@ -60,6 +60,7 @@ public partial class MainForm : EscapeForm {
         menu.Items.Add("Buscar actualizaciones", null, delegate { CheckGitHubUpdate(); });
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
         sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
+        InstallSoundPackMenu(menu);
         InstallProductivityMenu(menu);
         InstallBackupMenu(menu);
         InstallDraftContext();
@@ -100,6 +101,10 @@ public partial class MainForm : EscapeForm {
     private void PlayNamedSound(string name) {
         if(!soundsEnabled)return;
         string file=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"sounds",name+".wav");
+        if((soundPack == "curioso" || soundPack == "telefono") && (name.StartsWith("calc_", StringComparison.Ordinal) || name.StartsWith("tecla_", StringComparison.Ordinal))) {
+            string alternate=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"sounds",soundPack+"_"+name+".wav");
+            if(File.Exists(alternate))file=alternate;
+        }
         if(!File.Exists(file))return;
         try { if(soundPlayer!=null)soundPlayer.Dispose(); soundPlayer=new SoundPlayer(file);soundPlayer.Play(); }catch{}
     }

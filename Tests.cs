@@ -137,6 +137,6 @@ static class UpdateHandoffTests {
     }
 }
 static class TestProgram {
-    [STAThread] static int Main(){try { UpdateHandoffTests.Run(); EscapeTests.Run(); using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests(); using(var safety=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-safety-"+Guid.NewGuid().ToString("N")))) safety.RunSafetyFeatureTests(); using(var productivity=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-productivity-"+Guid.NewGuid().ToString("N")))) productivity.RunProductivityTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
+    [STAThread] static int Main(){try { SoundPackTests.Run(); UpdateHandoffTests.Run(); EscapeTests.Run(); using(var f=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-"+Guid.NewGuid().ToString("N"))))f.RunTests(); using(var safety=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-safety-"+Guid.NewGuid().ToString("N")))) safety.RunSafetyFeatureTests(); using(var productivity=new MainForm(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"test-data-productivity-"+Guid.NewGuid().ToString("N")))) productivity.RunProductivityTests();return 0; }catch(Exception ex){Console.WriteLine(ex);return 1;}}
 }
 }

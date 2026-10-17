@@ -87,7 +87,7 @@ namespace TodoAMano
             if (box == null) return;
             box.KeyPress += delegate(object sender, KeyPressEventArgs e)
             {
-                if (char.IsDigit(e.KeyChar)) PlayCalculatorSound1554("calc_numero");
+                if (char.IsDigit(e.KeyChar)) PlayCalculatorSound1554(soundPack == "telefono" && e.KeyChar >= '0' && e.KeyChar <= '9' ? "tecla_" + e.KeyChar : "calc_numero");
                 else if (e.KeyChar == ',' || e.KeyChar == '.') PlayCalculatorSound1554("calc_decimal");
                 else if (e.KeyChar == '+' || e.KeyChar == '-' || e.KeyChar == '*' || e.KeyChar == '/' || e.KeyChar == '%' || e.KeyChar == '(' || e.KeyChar == ')' || e.KeyChar == ';')
                     PlayCalculatorSound1554("calc_operacion");
