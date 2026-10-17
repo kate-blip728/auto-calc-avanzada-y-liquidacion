@@ -85,13 +85,8 @@ namespace TodoAMano
         private void AttachCalculatorTextBox1554(TextBox box, Action enterAction)
         {
             if (box == null) return;
-            box.KeyPress += delegate(object sender, KeyPressEventArgs e)
-            {
-                if (char.IsDigit(e.KeyChar)) PlayCalculatorSound1554((soundPack == "telefono" || soundPack == "personalizado") && e.KeyChar >= '0' && e.KeyChar <= '9' ? "tecla_" + e.KeyChar : "calc_numero");
-                else if (e.KeyChar == ',' || e.KeyChar == '.') PlayCalculatorSound1554("calc_decimal");
-                else if (e.KeyChar == '+' || e.KeyChar == '-' || e.KeyChar == '*' || e.KeyChar == '/' || e.KeyChar == '%' || e.KeyChar == '(' || e.KeyChar == ')' || e.KeyChar == ';')
-                    PlayCalculatorSound1554("calc_operacion");
-            };
+            typingSoundControls.GetValue(box,delegate(Control control) {return new object();});
+            box.KeyPress += delegate(object sender, KeyPressEventArgs e) { PlayTypingSound(e.KeyChar); };
             box.KeyDown += delegate(object sender, KeyEventArgs e)
             {
                 if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Delete)

@@ -378,7 +378,7 @@ namespace TodoAMano { public partial class MainForm {
             else if (label == "Abrir paréntesis") value = "(";
             else if (label == "Cerrar paréntesis") value = ")";
             if (label == "Coma decimal") PlayCalculatorSound1554("calc_decimal");
-            else if (label.Length == 1 && char.IsDigit(label[0])) PlayCalculatorSound1554("calc_numero");
+            else if (label.Length == 1 && char.IsDigit(label[0])) PlayCalculatorSound1554((soundPack=="telefono" || soundPack=="personalizado") ? "tecla_"+label : "calc_numero");
             else PlayCalculatorSound1554("calc_operacion");
             int start = calculadoraInput.SelectionStart;
             calculadoraInput.Text = calculadoraInput.Text.Insert(start, value);

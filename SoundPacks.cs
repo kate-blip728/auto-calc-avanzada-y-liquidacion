@@ -14,7 +14,7 @@ public partial class MainForm {
         if(name==null || name!=Path.GetFileName(name))return false;
         string stem=Path.GetFileNameWithoutExtension(name);
         if(!name.EndsWith(".wav",StringComparison.OrdinalIgnoreCase))return false;
-        string[] names={ "calc_numero","calc_decimal","calc_operacion","calc_borrar","calc_igual","calc_resultado","calc_conversion","calc_copiar","calc_eliminar_resultado","calc_historial_limpiar","calc_historial","calc_liquidacion_anadir","calc_liquidacion_borrar","calc_liquidacion_total","calc_memoria" };
+        string[] names={ "calc_numero","calc_decimal","calc_operacion","calc_borrar","calc_igual","calc_resultado","calc_conversion","calc_copiar","calc_eliminar_resultado","calc_historial_limpiar","calc_historial","calc_liquidacion_anadir","calc_liquidacion_borrar","calc_liquidacion_total","calc_memoria","calc_memoria_recuperar","calc_guardar","calc_curiosidad","calc_navegar","calc_pantalla","calc_abrir","calc_salir","calc_salir_pantalla","calc_escribir","calc_liquidacion_restar" };
         return Array.IndexOf(names,stem)>=0 || (stem.Length==7 && stem.StartsWith("tecla_",StringComparison.Ordinal) && stem[6]>='0' && stem[6]<='9');
     }
     private string ResolveSoundFile(string name) {
@@ -106,7 +106,7 @@ public partial class MainForm {
             }catch(Exception ex) { MessageBox.Show(this,ex.Message,"Plantilla de sonidos"); }
         }
     }
-    private const string CustomSoundsHelp = "Sustituye los WAV conservando sus nombres. No basta con renombrar un MP3: exporta WAV PCM de 8 o 16 bits, mono o estéreo, 8000 a 96000 Hz, hasta 5 segundos y 5 MB por archivo.\r\n\r\ncalc_numero.wav: números\r\ncalc_decimal.wav: coma o punto\r\ncalc_operacion.wav: operadores\r\ncalc_borrar.wav: borrar\r\ncalc_igual.wav: calcular\r\ncalc_resultado.wav: resultado\r\ncalc_conversion.wav: conversión\r\ncalc_copiar.wav: copiar\r\ncalc_eliminar_resultado.wav: eliminar resultado\r\ncalc_historial.wav: historial\r\ncalc_historial_limpiar.wav: limpiar historial\r\ncalc_liquidacion_anadir.wav: añadir artículo\r\ncalc_liquidacion_borrar.wav: borrar artículo\r\ncalc_liquidacion_total.wav: total\r\ncalc_memoria.wav: memoria\r\n\r\nOpcional: tecla_0.wav hasta tecla_9.wav para un sonido por cifra. Si falta una tecla se usa calc_numero.wav; si falta cualquier otro efecto se usa Clásico.\r\n\r\nImportar copia los archivos a los datos de usuario y sustituye el pack personalizado anterior. Las actualizaciones conservan esta carpeta. Los archivos con otros nombres se ignoran. No incluyas información privada en tus audios si vas a compartirlos.";
+    private const string CustomSoundsHelp = "Sustituye los WAV conservando sus nombres. No basta con renombrar un MP3: exporta WAV PCM de 8 o 16 bits, mono o estéreo, 8000 a 96000 Hz, hasta 5 segundos y 5 MB por archivo.\r\n\r\ncalc_numero.wav: números\r\ncalc_decimal.wav: coma o punto\r\ncalc_operacion.wav: operadores\r\ncalc_borrar.wav: borrar\r\ncalc_igual.wav: calcular\r\ncalc_resultado.wav: resultado\r\ncalc_conversion.wav: conversión\r\ncalc_copiar.wav: copiar\r\ncalc_eliminar_resultado.wav: eliminar resultado\r\ncalc_historial.wav: historial\r\ncalc_historial_limpiar.wav: limpiar historial\r\ncalc_liquidacion_anadir.wav: añadir artículo\r\ncalc_liquidacion_borrar.wav: borrar artículo\r\ncalc_liquidacion_total.wav: total\r\ncalc_memoria.wav: memoria\r\ncalc_memoria_recuperar.wav: recuperar memoria\r\ncalc_guardar.wav: guardar datos\r\ncalc_curiosidad.wav: curiosidad\r\ncalc_navegar.wav: moverse entre controles\r\ncalc_pantalla.wav: cambiar o abrir pantalla\r\ncalc_abrir.wav: inicio\r\ncalc_salir.wav: cerrar aplicación\r\ncalc_salir_pantalla.wav: cerrar diálogo\r\ncalc_escribir.wav: letras y texto\r\ncalc_liquidacion_restar.wav: restar artículo\r\n\r\nOpcional: tecla_0.wav hasta tecla_9.wav para un sonido por cifra. Si falta una tecla se usa calc_numero.wav; si falta cualquier otro efecto se usa Clásico.\r\n\r\nImportar copia los archivos a los datos de usuario y sustituye el pack personalizado anterior. Las actualizaciones conservan esta carpeta. Los archivos con otros nombres se ignoran. No incluyas información privada en tus audios si vas a compartirlos.";
     private void InstallSoundPackMenu(MenuStrip menu) {
         string preference=Path.Combine(dataDir,"pack_sonidos.txt");
         try { if(File.Exists(preference)) { string saved=File.ReadAllText(preference).Trim();if(IsSoundPack(saved))soundPack=saved; } }catch{}
@@ -115,7 +115,7 @@ public partial class MainForm {
         Action<string> select=delegate(string value) {
             try { File.WriteAllText(preference,value); }
             catch(Exception ex) { MessageBox.Show(this,"No se pudo guardar el pack: "+ex.Message,"Sonidos");return; }
-            soundPack=value;
+            soundPack=value;ResetSoundCache();
             foreach(var item in entries)item.Value.Checked=item.Key==value;
             PlayCalculatorSound1554("calc_resultado");
             AnnounceToScreenReader("Pack "+SoundPackLabels[Array.IndexOf(SoundPackIds,value)]+" seleccionado.");

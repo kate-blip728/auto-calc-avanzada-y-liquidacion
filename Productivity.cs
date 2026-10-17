@@ -76,13 +76,14 @@ namespace TodoAMano { public partial class MainForm {
         try { ApplyProductivityData(BackupSerializer().DeserializeObject(File.ReadAllText(path)) as Dictionary<string,object>); }
         catch { AnnounceToScreenReader("No se pudieron cargar los favoritos y memorias. El archivo original se conserva."); }
     }
-    private void ChangeProductivity(Action change) {
+    private void ChangeProductivity(Action change, string effect = "calc_guardar") {
         var previous=CaptureProductivityData();
         try {
             change();
             var data=CaptureProductivityData(); ValidateProductivityData(data);
             AtomicWriteCalculatorJson285(Path.Combine(dataDir,"favoritos-memorias.json"),BackupSerializer().Serialize(data));
             RefreshFavoriteMenu();
+            PlayCalculatorSound1554(effect);
         } catch { ApplyProductivityData(previous); throw; }
     }
     private void InstallProductivityMenu(MenuStrip menu) {
@@ -186,11 +187,12 @@ namespace TodoAMano { public partial class MainForm {
                 double number; string key=name.Text.Trim();
                 if(!double.TryParse(value.Text.Trim().Replace(',','.'),NumberStyles.Float,CultureInfo.InvariantCulture,out number) || double.IsNaN(number) || double.IsInfinity(number)) { MessageBox.Show(dialog,"Escribe un número válido."); return; }
                 if(namedMemories.ContainsKey(key) && MessageBox.Show(dialog,"¿Sustituir el valor de "+key+"?","Memoria",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button2)!=DialogResult.Yes)return;
-                try { ChangeProductivity(delegate { namedMemories[key]=number; }); refresh(); AnnounceToScreenReader("Memoria guardada: "+key+"."); } catch(Exception ex) { MessageBox.Show(dialog,ex.Message); }
+                try { ChangeProductivity(delegate { namedMemories[key]=number; }, "calc_memoria"); refresh(); AnnounceToScreenReader("Memoria guardada: "+key+"."); } catch(Exception ex) { MessageBox.Show(dialog,ex.Message); }
             }));
             row.Controls.Add(NewButton("Usar en calculadora",delegate { if(list.SelectedItem==null)return; double number=namedMemories[list.SelectedItem.ToString()];
                 dialog.Close(); calcTemplate.SelectedIndex=0; calculadoraInput.Text=number.ToString("R",SellerCulture2825);
                 calculatorTabs2824.SelectedTab=calculatorBasicPage2824; calculadoraInput.Focus(); calculadoraInput.SelectionStart=calculadoraInput.TextLength;
+                PlayCalculatorSound1554("calc_memoria_recuperar");
                 AnnounceToScreenReader("Memoria recuperada como entrada.");
             }));
             row.Controls.Add(NewButton("Eliminar",delegate { if(list.SelectedItem==null)return; string key=list.SelectedItem.ToString();

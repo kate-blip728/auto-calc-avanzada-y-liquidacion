@@ -59,7 +59,7 @@ public partial class MainForm : EscapeForm {
         menu.Items.Add(help);
         menu.Items.Add("Buscar actualizaciones", null, delegate { CheckGitHubUpdate(); });
         ToolStripMenuItem sound=new ToolStripMenuItem("Sonidos") { Checked=true, CheckOnClick=true };
-        sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked; }; menu.Items.Add(sound);
+        sound.CheckedChanged+=delegate { soundsEnabled=sound.Checked;if(soundEngine!=null)soundEngine.SetMuted(!soundsEnabled); }; menu.Items.Add(sound);
         InstallSoundPackMenu(menu);
         InstallProductivityMenu(menu);
         InstallBackupMenu(menu);
@@ -67,8 +67,10 @@ public partial class MainForm : EscapeForm {
         Controls.Add(menu); MainMenuStrip=menu;
         CompleteStartupLayout();
         ResumeLayout(true);
+        InstallAppSoundEvents();
+        Disposed+=delegate {FinishAppSounds();};
         Shown+=delegate { AnnounceToScreenReader("Auto Calc Avanzada y Liquidación. Lista."); };
-        FormClosed+=delegate { if(mobileSyncPeriodicTimer2940!=null)mobileSyncPeriodicTimer2940.Dispose(); if(mobileSyncDebounceTimer2940!=null)mobileSyncDebounceTimer2940.Dispose(); };
+        FormClosed+=delegate { FinishAppSounds();if(mobileSyncPeriodicTimer2940!=null)mobileSyncPeriodicTimer2940.Dispose(); if(mobileSyncDebounceTimer2940!=null)mobileSyncDebounceTimer2940.Dispose(); };
     }
     private void SetStatus(string text) { AnnounceToScreenReader(text); }
     private readonly object speechLock = new object();
@@ -97,12 +99,20 @@ public partial class MainForm : EscapeForm {
             }catch(Exception ex){MessageBox.Show(this,ex.Message,"Exportar calculadora");}
         }
     }
-    private SoundPlayer soundPlayer;
+    private SoundEngine soundEngine;
+    private readonly Dictionary<string,string> resolvedSounds=new Dictionary<string,string>();
+    private long soundPriorityUntil;
+    private string CachedSoundFile(string name) {
+        string file;if(!resolvedSounds.TryGetValue(name,out file)) {file=ResolveSoundFile(name);resolvedSounds[name]=file;}return file;
+    }
+    private void ResetSoundCache() { resolvedSounds.Clear();if(soundEngine!=null)soundEngine.Reset(); }
     private void PlayNamedSound(string name) {
-        if(!soundsEnabled)return;
-        string file=ResolveSoundFile(name);
-        if(!File.Exists(file))return;
-        try { if(soundPlayer!=null)soundPlayer.Dispose(); soundPlayer=new SoundPlayer(file);soundPlayer.Play(); }catch{}
+        if(!soundsEnabled || string.IsNullOrEmpty(name))return;
+        if(name=="navegar")name="calc_navegar";
+        if(navigationSoundTimer!=null)navigationSoundTimer.Stop();
+        soundPriorityUntil=System.Diagnostics.Stopwatch.GetTimestamp()+System.Diagnostics.Stopwatch.Frequency/3;
+        if(soundEngine==null)soundEngine=new SoundEngine();
+        soundEngine.Play(CachedSoundFile(name));
     }
     private WebClient NewWebClient(){return new NavajaWebClient();}
     private string NetworkHost153(string url){return new Uri(url).Host;}

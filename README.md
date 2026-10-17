@@ -1,10 +1,10 @@
 ﻿# Auto Calc Avanzada y Liquidación
 
-Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.13 de prueba**. No necesitas instalar ni abrir Navaja.
+Complemento para NVDA que abre una calculadora independiente de Navaja Suiza. Versión **0.1.14 de prueba**. No necesitas instalar ni abrir Navaja.
 
 ## Instalar y abrir
 
-Descarga [AutoCalc-0.1.13.nvda-addon](AutoCalc-0.1.13.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
+Descarga [AutoCalc-0.1.14.nvda-addon](AutoCalc-0.1.14.nvda-addon), ábrelo con NVDA y reinicia el lector. Pulsa **NVDA+Alt+C** o usa **NVDA → Herramientas → Auto Calc Avanzada y Liquidación**. Puedes cambiar el atajo en Gestos de entrada.
 
 El complemento carga un pequeño lanzador y abre la calculadora sólo cuando la pides. La calculadora usa .NET Framework de Windows y sus controles estándar accesibles. No lleva las funciones de radio, correo, juegos en red ni otros módulos de Navaja.
 
@@ -46,7 +46,7 @@ Se ha compilado la calculadora y probado su construcción, cálculos básicos, c
 
 ## Código fuente
 
-El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.13.zip), extraerlo y compilarlo con los mismos scripts.
+El repositorio incluye todos los fuentes y sonidos. También puedes descargar [el código organizado en carpetas](AutoCalc_codigo_fuente_0.1.14.zip), extraerlo y compilarlo con los mismos scripts.
 
 ## Compilar
 
@@ -98,7 +98,7 @@ Restaurar requiere confirmación y crea antes una copia del estado actual; recha
 
 La fecha y la nota del borrador se conservan al cerrar normalmente. Deshacer y rehacer se reinician al cerrar. Se mantiene el cierre seguro para actualizar de 0.1.9.
 
-## Favoritos, memorias y operaciones en 0.1.13
+## Favoritos, memorias y operaciones en 0.1.14
 
 En el menú Favoritos y memorias puedes guardar el cálculo actual de Calcular o Práctica y científica. Guarda el modo, los datos y un nombre. Cargarlo no lo calcula automáticamente: revisa la entrada y pulsa Calcular. Se admiten 50 favoritos; los primeros nueve se abren con Ctrl+Mayúsculas+F1 a F9 mientras la aplicación está abierta. Gestionar favoritos permite renombrarlos y eliminarlos.
 
@@ -113,8 +113,11 @@ Práctica y científica añade Quitar IVA del total (121;21), Qué porcentaje es
 ## Pack Curioso
 En Pack de sonidos, elige Curioso: burbujas y arcade. Incluye 15 efectos originales. La elección se conserva y puedes volver a Clásico.
 
-## Sonidos 0.1.13
+## Sonidos 0.1.14
 Pack de sonidos: Clásico, Curioso (burbujas y arcade) y Teléfono (marcación por cada dígito, línea, llamada y ocupado). La selección se conserva al reabrir. Los sonidos se desactivan desde Sonidos.
 
 ## Sonidos propios y packs nuevos
 Nuevos packs: Policial, Ordenador y Personalizado. En Pack de sonidos puedes importar una carpeta con WAV o crear una plantilla con los nombres. La importación sustituye tu pack personalizado anterior. Los sonidos se copian a los datos de usuario y se conservan al actualizar. Si falta un archivo se usa Clásico. WAV PCM de 8/16 bits, mono o estéreo, hasta 5 segundos por efecto. Opcional: tecla_0.wav a tecla_9.wav; sin ellas se usa calc_numero.wav.
+
+## Sonidos y rendimiento
+0.1.14: sonidos de escritura, inicio, navegación, pantallas, salida, curiosidades, guardado y recuperación de memoria para los cinco packs. La navegación se agrupa para no interrumpir resultados. El teclado en pantalla usa marcación por cifra. Carga de audio fuera de la interfaz y caché limitada. Plantillas ampliadas con los nuevos nombres.

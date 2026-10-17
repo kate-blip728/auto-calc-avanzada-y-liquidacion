@@ -1,6 +1,6 @@
 {
-  "version": "0.1.13",
-  "file": "AutoCalc-0.1.13.nvda-addon",
-  "sha256": "dffc49fc60f6d38ad736be1c022357cd8a580c33dbe1416e8116eff45fac018d",
-  "notes": "Packs Policial y Ordenador. Importación de sonidos propios WAV conservando nombres, plantilla y ayuda. El pack personalizado se conserva al actualizar; efectos ausentes usan Clásico."
+  "version": "0.1.14",
+  "file": "AutoCalc-0.1.14.nvda-addon",
+  "sha256": "ea716bd65589b6d06c5f12ad029b369aef07ed3562b027496b89df319507d1c4",
+  "notes": "Audio con caché y carga fuera de la interfaz. Nuevos efectos en los cinco packs: escritura, navegación, pantallas, salida, curiosidades, guardado y recuperación de memoria. Marcación telefónica también con botones; plantilla ampliada."
 }

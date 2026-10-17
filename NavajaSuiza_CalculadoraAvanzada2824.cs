@@ -951,7 +951,7 @@ namespace TodoAMano
             if (sellerLines2825.Count == 0) { PlayNamedSound("aviso"); return; }
             string total = "Total: " + SellerTotal2825().ToString("N2", SellerCulture2825) + " €";
             AddCalculatorHistory2824("Liquidación de vendedor", SellerBreakdown2825(), total, "");
-            PlayCalculatorSound1554("calc_liquidacion_total");
+            PlayCalculatorSound1554("calc_guardar");
             AnnounceToScreenReader("Liquidación guardada en el historial. " + total + ".");
         }
 
@@ -1058,7 +1058,7 @@ namespace TodoAMano
             sellerSaved2826.Add(item);
             QueueSellerLiquidationsSave285();
             RefreshSellerSavedList2826();
-            PlayCalculatorSound1554("calc_historial");
+            PlayCalculatorSound1554("calc_guardar");
             AnnounceToScreenReader("Liquidación guardada para " + when.ToString("dd/MM/yyyy") + ". Total " + item.Total.ToString("N2", SellerCulture2825) + " euros.");
             PrepareNewSellerLiquidationAfterSave2826();
             AnnounceToScreenReader("Nueva liquidación preparada para introducir la siguiente.");
@@ -1569,7 +1569,7 @@ namespace TodoAMano
             RefreshSellerSavedList2826();
             sellerCorrectionId2827 = "";
             UpdateSellerCorrectionStatus2827();
-            PlayCalculatorSound1554("calc_historial");
+            PlayCalculatorSound1554("calc_guardar");
             AnnounceToScreenReader("Corrección guardada. Nuevo total " + item.Total.ToString("N2", SellerCulture2825) + " euros. La versión anterior se conserva en el historial de correcciones.");
         }
 
@@ -2220,7 +2220,7 @@ namespace TodoAMano
                 calculadoraInput.Focus();
                 calculadoraInput.SelectAll();
             }
-            PlayCalculatorSound1554("calc_memoria");
+            PlayCalculatorSound1554("calc_memoria_recuperar");
             AnnounceToScreenReader("Memoria recuperada.");
         }
 
@@ -2273,9 +2273,9 @@ namespace TodoAMano
                 }
             }
             sb.Append(".");
-            PlayCalculatorSound1554("calc_historial");
+            PlayCalculatorSound1554("calc_curiosidad");
             AnnounceToScreenReader(sb.ToString());
-            SetStatus(sb.ToString());
+
         }
 
         private bool IsPrime2824(long n)
