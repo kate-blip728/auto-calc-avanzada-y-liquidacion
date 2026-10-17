@@ -1,6 +1,6 @@
 {
-  "file": "AutoCalc-0.1.12.nvda-addon",
-  "version": "0.1.12",
-  "sha256": "2c9ac4f01e7b3dc7cfe1f1fd3a2f8ccef5e0529bb9b57ebe2b6dc692eaaa6ced",
-  "notes": "Tres packs de sonidos: Clásico, Curioso y Teléfono. Marcación por dígito, selección persistente y muestra desde el menú Pack de sonidos."
+  "version": "0.1.13",
+  "file": "AutoCalc-0.1.13.nvda-addon",
+  "sha256": "dffc49fc60f6d38ad736be1c022357cd8a580c33dbe1416e8116eff45fac018d",
+  "notes": "Packs Policial y Ordenador. Importación de sonidos propios WAV conservando nombres, plantilla y ayuda. El pack personalizado se conserva al actualizar; efectos ausentes usan Clásico."
 }
